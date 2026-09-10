@@ -1,22 +1,22 @@
 import { TYPE_CODES } from "@/lib/assessment";
 
 const COLORS = [
-  "#8c5a3c",
-  "#c4894a",
-  "#6b7c5a",
-  "#4a6b73",
-  "#7a5a73",
-  "#a36b4a",
-  "#5a6b8c",
-  "#8c6b5a",
-  "#6b8c6b",
-  "#8c5a5a",
-  "#5a738c",
-  "#738c5a",
-  "#8c735a",
-  "#5a8c73",
-  "#735a8c",
-  "#8c8c5a",
+  "#111",
+  "#222",
+  "#333",
+  "#444",
+  "#555",
+  "#666",
+  "#777",
+  "#888",
+  "#999",
+  "#aaa",
+  "#bbb",
+  "#1a1a1a",
+  "#2e2e2e",
+  "#424242",
+  "#5c5c5c",
+  "#767676",
 ];
 
 export function TypeCharts({ counts }: { counts: Record<string, number> }) {
