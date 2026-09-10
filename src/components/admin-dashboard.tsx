@@ -4,11 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SendInvite } from "@/components/send-invite";
 import { TypeCharts } from "@/components/type-charts";
-import { TypePicker } from "@/components/type-picker";
 import { shortSha } from "@/lib/version";
 
 type PersonRow = {
@@ -55,9 +53,6 @@ function sourceLabel(source: string | null | undefined) {
 }
 
 export function AdminDashboard() {
-  const [name, setName] = useState("");
-  const [expectedType, setExpectedType] = useState("");
-  const [notes, setNotes] = useState("");
   const [people, setPeople] = useState<PersonRow[]>([]);
   const [unlinked, setUnlinked] = useState<Unlinked[]>([]);
   const [typeCounts, setTypeCounts] = useState<Record<string, number>>({});
@@ -86,24 +81,6 @@ export function AdminDashboard() {
   useEffect(() => {
     void load();
   }, []);
-
-  async function addPerson(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    const res = await fetch("/api/people", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, expectedType, notes }),
-    });
-    if (!res.ok) {
-      setError("Could not add person.");
-      return;
-    }
-    setName("");
-    setExpectedType("");
-    setNotes("");
-    await load();
-  }
 
   async function copyLink(path: string, key: string) {
     const url = `${window.location.origin}${path}`;
@@ -169,49 +146,12 @@ export function AdminDashboard() {
         </button>
       </div>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-        Make a unique link. Name is optional and stays in the table — never in
-        the URL. Copy the link, or text it. Works from your phone.
+        Everyone&apos;s takes — Shared or Walk-in. New links are on{" "}
+        <Link href="/invite" className="underline-offset-4 hover:underline">
+          Share Invite
+        </Link>
+        .
       </p>
-
-      <form
-        onSubmit={addPerson}
-        className="mt-8 space-y-3 rounded-2xl border border-border bg-card px-4 py-5 sm:px-5"
-      >
-        <p className="font-heading text-xl">New link</p>
-        <div className="flex flex-wrap items-end gap-3">
-          <div className="w-full space-y-2 sm:w-auto">
-            <Label htmlFor="person">Name (optional)</Label>
-            <Input
-              id="person"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Sarah"
-              className="h-11 w-full sm:w-56"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Type you think they are</Label>
-            <TypePicker value={expectedType} onChange={setExpectedType} />
-          </div>
-          <Button
-            type="submit"
-            className="h-12 w-full rounded-full px-5 sm:w-auto"
-          >
-            Add + make link
-          </Button>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="notes">Notes</Label>
-          <textarea
-            id="notes"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            rows={2}
-            className="w-full max-w-xl rounded-md border border-input bg-transparent px-3 py-2 text-sm"
-            placeholder="Optional"
-          />
-        </div>
-      </form>
       {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
 
       <TypeCharts counts={typeCounts} />
