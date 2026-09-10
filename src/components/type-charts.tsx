@@ -83,24 +83,28 @@ export function TypeCharts({ counts }: { counts: Record<string, number> }) {
       <div>
         <p className="mb-3 text-sm text-muted-foreground">All 16</p>
         <div className="space-y-1">
-          {TYPE_CODES.map((code, i) => {
-            const n = counts[code] ?? 0;
-            return (
-              <div key={code} className="flex items-center gap-2 text-[11px]">
-                <span className="w-10 shrink-0 text-muted-foreground">{code}</span>
+          {[...TYPE_CODES]
+            .map((code, i) => ({ code, n: counts[code] ?? 0, color: COLORS[i] }))
+            .sort((a, b) => b.n - a.n || a.code.localeCompare(b.code))
+            .map((row) => (
+              <div key={row.code} className="flex items-center gap-2 text-[11px]">
+                <span className="w-10 shrink-0 text-muted-foreground">
+                  {row.code}
+                </span>
                 <div className="h-2 flex-1 overflow-hidden rounded-full bg-secondary">
                   <div
                     className="h-full rounded-full"
                     style={{
-                      width: `${(n / max) * 100}%`,
-                      background: COLORS[i],
+                      width: `${(row.n / max) * 100}%`,
+                      background: row.color,
                     }}
                   />
                 </div>
-                <span className="w-4 text-right text-muted-foreground">{n}</span>
+                <span className="w-4 text-right text-muted-foreground">
+                  {row.n}
+                </span>
               </div>
-            );
-          })}
+            ))}
         </div>
       </div>
     </div>
