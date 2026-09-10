@@ -24,6 +24,7 @@ export const invites = pgTable("invites", {
   personId: uuid("person_id")
     .notNull()
     .references(() => people.id),
+  createdIp: text("created_ip"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

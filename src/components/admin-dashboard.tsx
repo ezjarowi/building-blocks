@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SendInvite } from "@/components/send-invite";
 import { TypeCharts } from "@/components/type-charts";
 import { TypePicker } from "@/components/type-picker";
-import { invitePath, inviteText, smsHref } from "@/lib/invite-url";
 import { shortSha } from "@/lib/version";
 
 type PersonRow = {
@@ -24,6 +24,7 @@ type PersonRow = {
   latestAt: string | null;
   latestName: string | null;
   latestVerified: boolean;
+  createdIp: string | null;
 };
 
 type Take = {
@@ -45,46 +46,6 @@ type Unlinked = {
   verified: boolean;
   createdAt: string;
 };
-
-function SendInvite({
-  token,
-  name,
-  copied,
-  onCopy,
-}: {
-  token: string;
-  name: string;
-  copied: boolean;
-  onCopy: (path: string) => void;
-}) {
-  const greet = Boolean(name.trim());
-  const path = invitePath(token, greet);
-
-  function text() {
-    const url = `${window.location.origin}${path}`;
-    window.location.href = smsHref(inviteText(name, url));
-  }
-
-  return (
-    <>
-      <Button
-        type="button"
-        variant="outline"
-        className="h-11 min-w-[7rem] rounded-full px-4"
-        onClick={() => onCopy(path)}
-      >
-        {copied ? "Copied" : "Copy link"}
-      </Button>
-      <Button
-        type="button"
-        className="h-11 min-w-[5.5rem] rounded-full px-4"
-        onClick={text}
-      >
-        Text
-      </Button>
-    </>
-  );
-}
 
 export function AdminDashboard() {
   const [name, setName] = useState("");
@@ -271,6 +232,7 @@ export function AdminDashboard() {
                   person.expectedType === person.latestType
                     ? " · match"
                     : ""}
+                  {person.createdIp ? ` · from ${person.createdIp}` : ""}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">

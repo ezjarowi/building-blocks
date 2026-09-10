@@ -3,15 +3,10 @@ import { NextResponse } from "next/server";
 import { ADMIN_COOKIE, adminSecret } from "@/lib/admin";
 import { getDb } from "@/lib/db";
 import { adminLockouts } from "@/lib/db/schema";
+import { clientIp } from "@/lib/ip";
 
 const MAX_TRIES = 3;
 const LOCK_MS = 7 * 24 * 60 * 60 * 1000;
-
-function clientIp(request: Request) {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0]?.trim() || "unknown";
-  return request.headers.get("x-real-ip")?.trim() || "unknown";
-}
 
 export async function POST(request: Request) {
   const secret = adminSecret();

@@ -1,10 +1,11 @@
-import { randomBytes } from "node:crypto";
 import { desc } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { isAdmin } from "@/lib/admin";
+import { createInvite } from "@/lib/create-invite";
 import { getDb } from "@/lib/db";
 import { assessments, invites, people } from "@/lib/db/schema";
 import { invitePath } from "@/lib/invite-url";
+import { clientIp } from "@/lib/ip";
 
 export async function GET() {
   if (!(await isAdmin())) {
@@ -30,6 +31,7 @@ export async function GET() {
       createdAt: person.createdAt,
       token: personInvites[0]?.token ?? null,
       path: personInvites[0] ? invitePath(personInvites[0].token) : null,
+      createdIp: personInvites[0]?.createdIp ?? null,
       takeCount: takes.length,
       latestType: latest?.typeCode ?? null,
       latestAt: latest?.createdAt ?? null,
@@ -69,19 +71,14 @@ export async function POST(request: Request) {
   const name = body.name?.trim() ?? "";
   const expectedType = body.expectedType?.trim().toUpperCase() || null;
   const notes = body.notes?.trim() || null;
-
-  const db = getDb();
-  const [person] = await db
-    .insert(people)
-    .values({ name, expectedType, notes })
-    .returning();
-  const token = randomBytes(9).toString("base64url");
-  await db.insert(invites).values({ token, personId: person.id });
-
-  return NextResponse.json({
-    id: person.id,
-    name: person.name,
-    token,
-    path: invitePath(token),
+  const made = await createInvite({
+    name,
+    expectedType,
+    notes,
+    ip: clientIp(request),
   });
+  if ("error" in made) {
+    return NextResponse.json({ error: made.error }, { status: 429 });
+  }
+  return NextResponse.json(made);
 }
