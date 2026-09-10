@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { run, type Answer } from "@/lib/assessment";
+import { clearDraft, readDraft, writeDraft } from "@/lib/draft";
 import { rememberTakeId } from "@/lib/my-takes";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -32,12 +33,37 @@ export function AssessClient({
 }) {
   const router = useRouter();
   const invited = Boolean(inviteToken && intendedName);
+  const [ready, setReady] = useState(false);
   const [name, setName] = useState(intendedName ?? "");
   const [named, setNamed] = useState(invited && !greet);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [seenInsight, setSeenInsight] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const draft = readDraft(inviteToken);
+    const knownName = (draft?.name || intendedName || "").trim();
+    if (draft) {
+      setName(knownName);
+      setNamed(
+        draft.named ||
+          draft.answers.length > 0 ||
+          Boolean(knownName && invited && !greet),
+      );
+      setAnswers(draft.answers);
+      setSeenInsight(draft.seenInsight);
+    } else if (knownName && invited && !greet) {
+      setName(knownName);
+      setNamed(true);
+    }
+    setReady(true);
+  }, [inviteToken, intendedName, greet, invited]);
+
+  useEffect(() => {
+    if (!ready || saving) return;
+    writeDraft(inviteToken, { name, named, answers, seenInsight });
+  }, [ready, saving, inviteToken, name, named, answers, seenInsight]);
 
   const state = useMemo(() => run(answers), [answers]);
   const insightKey = state.answered;
@@ -62,6 +88,7 @@ export function AssessClient({
       }
       const data = (await res.json()) as { id: string };
       rememberTakeId(data.id);
+      clearDraft(inviteToken);
       router.push(`/result/${data.id}`);
     } catch {
       sessionStorage.setItem("bb-answers", JSON.stringify(nextAnswers));
@@ -86,6 +113,14 @@ export function AssessClient({
   function back() {
     setError(null);
     setAnswers((prev) => prev.slice(0, -1));
+  }
+
+  if (!ready) {
+    return (
+      <div className="flex flex-1 flex-col py-4">
+        <Progress named={false} answered={0} total={10} />
+      </div>
+    );
   }
 
   if (!named && invited && greet) {
