@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordField } from "@/components/password-field";
 
 export function AdminLogin() {
   const router = useRouter();
@@ -38,12 +38,10 @@ export function AdminLogin() {
       </p>
       <div className="mt-8 space-y-2">
         <Label htmlFor="password">Password</Label>
-        <Input
+        <PasswordField
           id="password"
-          type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="current-password"
+          onChange={setPassword}
         />
       </div>
       {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
