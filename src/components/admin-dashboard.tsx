@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TypeCharts } from "@/components/type-charts";
 import { TypePicker } from "@/components/type-picker";
+import { invitePath, inviteText, smsHref } from "@/lib/invite-url";
 import { shortSha } from "@/lib/version";
 
 type PersonRow = {
@@ -45,6 +46,46 @@ type Unlinked = {
   verified: boolean;
   createdAt: string;
 };
+
+function SendInvite({
+  token,
+  name,
+  copied,
+  onCopy,
+}: {
+  token: string;
+  name: string;
+  copied: boolean;
+  onCopy: (path: string) => void;
+}) {
+  const greet = Boolean(name.trim());
+  const path = invitePath(token, greet);
+
+  function text() {
+    const url = `${window.location.origin}${path}`;
+    window.location.href = smsHref(inviteText(name, url));
+  }
+
+  return (
+    <>
+      <Button
+        type="button"
+        variant="outline"
+        className="h-11 min-w-[7rem] rounded-full px-4"
+        onClick={() => onCopy(path)}
+      >
+        {copied ? "Copied" : "Copy link"}
+      </Button>
+      <Button
+        type="button"
+        className="h-11 min-w-[5.5rem] rounded-full px-4"
+        onClick={text}
+      >
+        Text
+      </Button>
+    </>
+  );
+}
 
 export function AdminDashboard() {
   const router = useRouter();
@@ -163,8 +204,7 @@ export function AdminDashboard() {
       </div>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
         Make a unique link. Name is optional and stays in the table — never in
-        the URL. If you add a name, you can greet them (“Hi, Sarah”) or send a
-        quiet link. If you skip the name, they’ll type it when they take it.
+        the URL. Copy the link, or text it. Works from your phone.
       </p>
 
       <TypeCharts counts={typeCounts} />
@@ -178,14 +218,14 @@ export function AdminDashboard() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Sarah"
-              className="w-56"
+              className="h-11 w-full sm:w-56"
             />
           </div>
           <div className="space-y-2">
             <Label>Type you think they are</Label>
             <TypePicker value={expectedType} onChange={setExpectedType} />
           </div>
-          <Button type="submit" className="rounded-full">
+          <Button type="submit" className="h-11 rounded-full px-5">
             Add + make link
           </Button>
         </div>
@@ -230,55 +270,12 @@ export function AdminDashboard() {
               </div>
               <div className="flex flex-wrap gap-2">
                 {person.token ? (
-                  person.name.trim() ? (
-                    <>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="rounded-full"
-                        onClick={() =>
-                          copyLink(
-                            `/assess?to=${encodeURIComponent(person.token!)}&hi=1`,
-                            `${person.id}-hi`,
-                          )
-                        }
-                      >
-                        {copied === `${person.id}-hi`
-                          ? "Copied"
-                          : `Hi, ${person.name}`}
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="rounded-full"
-                        onClick={() =>
-                          copyLink(
-                            `/assess?to=${encodeURIComponent(person.token!)}&quiet=1`,
-                            `${person.id}-quiet`,
-                          )
-                        }
-                      >
-                        {copied === `${person.id}-quiet` ? "Copied" : "No name"}
-                      </Button>
-                    </>
-                  ) : (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="rounded-full"
-                      onClick={() =>
-                        copyLink(
-                          `/assess?to=${encodeURIComponent(person.token!)}&quiet=1`,
-                          `${person.id}-quiet`,
-                        )
-                      }
-                    >
-                      {copied === `${person.id}-quiet` ? "Copied" : "Copy link"}
-                    </Button>
-                  )
+                  <SendInvite
+                    token={person.token}
+                    name={person.name}
+                    copied={copied === person.id}
+                    onCopy={(path) => copyLink(path, person.id)}
+                  />
                 ) : null}
                 <Button
                   type="button"
