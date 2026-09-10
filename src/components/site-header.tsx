@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { TakeItLink } from "@/components/assess-link";
 
 export function SiteHeader({ quiet = false }: { quiet?: boolean }) {
   return (
@@ -9,12 +10,7 @@ export function SiteHeader({ quiet = false }: { quiet?: boolean }) {
       {quiet ? (
         <span className="text-muted-foreground text-sm">No wrong answers</span>
       ) : (
-        <Link
-          href="/assess"
-          className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-        >
-          Take it
-        </Link>
+        <TakeItLink className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline" />
       )}
     </header>
   );

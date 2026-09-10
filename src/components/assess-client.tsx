@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { run, type Answer } from "@/lib/assessment";
 import { clearDraft, readDraft, writeDraft } from "@/lib/draft";
@@ -32,43 +32,95 @@ export function AssessClient({
   greet?: boolean;
 }) {
   const router = useRouter();
-  const invited = Boolean(inviteToken && intendedName);
   const [ready, setReady] = useState(false);
+  const [token, setToken] = useState(inviteToken ?? null);
+  const [doGreet, setDoGreet] = useState(greet);
   const [name, setName] = useState(intendedName ?? "");
-  const [named, setNamed] = useState(invited && !greet);
+  const [named, setNamed] = useState(false);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [seenInsight, setSeenInsight] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const draft = readDraft(inviteToken);
-    const knownName = (draft?.name || intendedName || "").trim();
-    if (draft) {
-      setName(knownName);
-      setNamed(
-        draft.named ||
-          draft.answers.length > 0 ||
-          Boolean(knownName && invited && !greet),
-      );
-      setAnswers(draft.answers);
-      setSeenInsight(draft.seenInsight);
-    } else if (knownName && invited && !greet) {
-      setName(knownName);
-      setNamed(true);
-    }
-    setReady(true);
-  }, [inviteToken, intendedName, greet, invited]);
+  const readyRef = useRef(false);
+  const doneRef = useRef(false);
+  const snap = useRef({
+    token: inviteToken ?? null,
+    greet,
+    name: intendedName ?? "",
+    named: false,
+    answers: [] as Answer[],
+    seenInsight: 0,
+  });
+
+  function persist(next: {
+    token?: string | null;
+    greet?: boolean;
+    name?: string;
+    named?: boolean;
+    answers?: Answer[];
+    seenInsight?: number;
+  }) {
+    const merged = {
+      token: next.token ?? snap.current.token,
+      greet: next.greet ?? snap.current.greet,
+      name: next.name ?? snap.current.name,
+      named: next.named ?? snap.current.named,
+      answers: next.answers ?? snap.current.answers,
+      seenInsight: next.seenInsight ?? snap.current.seenInsight,
+    };
+    snap.current = merged;
+    writeDraft(merged.token, merged);
+  }
 
   useEffect(() => {
-    if (!ready || saving) return;
-    writeDraft(inviteToken, { name, named, answers, seenInsight });
-  }, [ready, saving, inviteToken, name, named, answers, seenInsight]);
+    if (readyRef.current) return;
+    const draft = readDraft(inviteToken);
+    const nextToken = inviteToken || draft?.inviteToken || null;
+    const nextName = (intendedName || draft?.name || "").trim();
+    const nextGreet = inviteToken ? greet : Boolean(draft?.greet);
+    const started = Boolean(draft?.named || (draft?.answers.length ?? 0) > 0);
+    const nextNamed = started || Boolean(nextName && !nextGreet);
+    const restored = {
+      token: nextToken,
+      greet: nextGreet,
+      name: nextName,
+      named: nextNamed,
+      answers: draft?.answers ?? [],
+      seenInsight: draft?.seenInsight ?? 0,
+    };
+    snap.current = restored;
+    readyRef.current = true;
+    setToken(nextToken);
+    setDoGreet(nextGreet);
+    setName(nextName);
+    setNamed(nextNamed);
+    setAnswers(restored.answers);
+    setSeenInsight(restored.seenInsight);
+    writeDraft(nextToken, restored);
+    setReady(true);
+  }, [inviteToken, intendedName, greet]);
+
+  useEffect(() => {
+    const flush = () => {
+      if (!readyRef.current || doneRef.current) return;
+      const s = snap.current;
+      writeDraft(s.token, s);
+    };
+    window.addEventListener("pagehide", flush);
+    return () => {
+      flush();
+      window.removeEventListener("pagehide", flush);
+    };
+  }, []);
 
   const state = useMemo(() => run(answers), [answers]);
   const insightKey = state.answered;
   const showInsight =
     Boolean(state.insight) && seenInsight < insightKey && !state.done;
+  const knownName = Boolean(name.trim());
+  const showNameAsk = !named && !knownName;
+  const showGreet = !named && knownName && doGreet;
 
   async function finish(nextAnswers: Answer[]) {
     setSaving(true);
@@ -80,7 +132,7 @@ export function AssessClient({
         body: JSON.stringify({
           answers: nextAnswers,
           name,
-          inviteToken: inviteToken ?? undefined,
+          inviteToken: token ?? undefined,
         }),
       });
       if (!res.ok) {
@@ -88,7 +140,8 @@ export function AssessClient({
       }
       const data = (await res.json()) as { id: string };
       rememberTakeId(data.id);
-      clearDraft(inviteToken);
+      doneRef.current = true;
+      clearDraft(token);
       router.push(`/result/${data.id}`);
     } catch {
       sessionStorage.setItem("bb-answers", JSON.stringify(nextAnswers));
@@ -102,6 +155,7 @@ export function AssessClient({
       ...answers,
       { questionId: state.next.id, optionId },
     ];
+    persist({ answers: nextAnswers, named: true });
     const preview = run(nextAnswers);
     if (preview.done) {
       void finish(nextAnswers);
@@ -112,7 +166,19 @@ export function AssessClient({
 
   function back() {
     setError(null);
-    setAnswers((prev) => prev.slice(0, -1));
+    setAnswers((prev) => {
+      const next = prev.slice(0, -1);
+      persist({ answers: next });
+      return next;
+    });
+  }
+
+  function acceptName() {
+    const next = name.trim();
+    if (!next) return;
+    setName(next);
+    setNamed(true);
+    persist({ name: next, named: true });
   }
 
   if (!ready) {
@@ -123,19 +189,22 @@ export function AssessClient({
     );
   }
 
-  if (!named && invited && greet) {
+  if (showGreet) {
     return (
       <div className="flex flex-1 flex-col py-4">
         <Progress named={false} answered={0} total={state.total} />
         <div className="flex flex-1 flex-col justify-center py-8">
-          <h1 className="font-heading text-5xl">Hi, {intendedName}.</h1>
+          <h1 className="font-heading text-5xl">Hi, {name}.</h1>
           <p className="mt-4 max-w-md text-lg text-muted-foreground">
             This one was made for you. No wrong answers.
           </p>
           <Button
             className="mt-8 h-12 w-fit rounded-full px-6"
             size="lg"
-            onClick={() => setNamed(true)}
+            onClick={() => {
+              setNamed(true);
+              persist({ named: true });
+            }}
           >
             Start
           </Button>
@@ -144,14 +213,13 @@ export function AssessClient({
     );
   }
 
-  if (!named) {
+  if (showNameAsk) {
     return (
       <form
         className="flex flex-1 flex-col py-4"
         onSubmit={(e) => {
           e.preventDefault();
-          if (!name.trim()) return;
-          setNamed(true);
+          acceptName();
         }}
       >
         <Progress named={false} answered={0} total={state.total} />
@@ -206,7 +274,10 @@ export function AssessClient({
         <Button
           className="mt-8 h-12 w-fit rounded-full px-6"
           size="lg"
-          onClick={() => setSeenInsight(insightKey)}
+          onClick={() => {
+            setSeenInsight(insightKey);
+            persist({ seenInsight: insightKey });
+          }}
         >
           Keep going
         </Button>

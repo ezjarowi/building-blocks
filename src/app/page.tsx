@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
+import { StartCta } from "@/components/assess-link";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
@@ -25,7 +25,7 @@ export default function Home() {
         </ul>
         <div className="mt-10 flex flex-wrap items-center gap-4">
           <Button asChild size="lg" className="h-12 rounded-full px-6 text-base">
-            <Link href="/assess">Start — it&apos;s a party game</Link>
+            <StartCta />
           </Button>
           <p className="text-muted-foreground text-sm">About five minutes.</p>
         </div>
