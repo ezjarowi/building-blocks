@@ -162,9 +162,9 @@ export function AdminDashboard() {
         </button>
       </div>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-        Type a name, copy a link, send it. You already know who it is from the
-        link. Two versions: greet them (“Hi, Sarah”) or don’t say the name.
-        Same person can take it more than once.
+        Make a unique link. Name is optional and stays in the table — never in
+        the URL. If you add a name, you can greet them (“Hi, Sarah”) or send a
+        quiet link. If you skip the name, they’ll type it when they take it.
       </p>
 
       <TypeCharts counts={typeCounts} />
@@ -172,7 +172,7 @@ export function AdminDashboard() {
       <form onSubmit={addPerson} className="mt-8 space-y-3">
         <div className="flex flex-wrap items-end gap-3">
           <div className="space-y-2">
-            <Label htmlFor="person">Name</Label>
+            <Label htmlFor="person">Name (optional)</Label>
             <Input
               id="person"
               value={name}
@@ -211,7 +211,9 @@ export function AdminDashboard() {
           <Card key={person.id} className="px-5 py-4">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="font-heading text-xl">{person.name}</p>
+                <p className="font-heading text-xl">
+                  {person.name.trim() || "Unnamed link"}
+                </p>
                 <p className="text-sm text-muted-foreground">
                   {person.expectedType
                     ? `Thought ${person.expectedType}`
@@ -228,23 +230,40 @@ export function AdminDashboard() {
               </div>
               <div className="flex flex-wrap gap-2">
                 {person.token ? (
-                  <>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="rounded-full"
-                      onClick={() =>
-                        copyLink(
-                          `/assess?to=${encodeURIComponent(person.token!)}&hi=1`,
-                          `${person.id}-hi`,
-                        )
-                      }
-                    >
-                      {copied === `${person.id}-hi`
-                        ? "Copied"
-                        : `Hi, ${person.name}`}
-                    </Button>
+                  person.name.trim() ? (
+                    <>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full"
+                        onClick={() =>
+                          copyLink(
+                            `/assess?to=${encodeURIComponent(person.token!)}&hi=1`,
+                            `${person.id}-hi`,
+                          )
+                        }
+                      >
+                        {copied === `${person.id}-hi`
+                          ? "Copied"
+                          : `Hi, ${person.name}`}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="rounded-full"
+                        onClick={() =>
+                          copyLink(
+                            `/assess?to=${encodeURIComponent(person.token!)}&quiet=1`,
+                            `${person.id}-quiet`,
+                          )
+                        }
+                      >
+                        {copied === `${person.id}-quiet` ? "Copied" : "No name"}
+                      </Button>
+                    </>
+                  ) : (
                     <Button
                       type="button"
                       variant="outline"
@@ -257,9 +276,9 @@ export function AdminDashboard() {
                         )
                       }
                     >
-                      {copied === `${person.id}-quiet` ? "Copied" : "No name"}
+                      {copied === `${person.id}-quiet` ? "Copied" : "Copy link"}
                     </Button>
-                  </>
+                  )
                 ) : null}
                 <Button
                   type="button"

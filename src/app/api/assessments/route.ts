@@ -40,7 +40,13 @@ export async function POST(request: Request) {
     if (found[0]) {
       inviteId = found[0].inviteId;
       personId = found[0].personId;
-      if (!name) name = found[0].personName;
+      if (!name) name = found[0].personName?.trim() ?? "";
+      if (name && !found[0].personName?.trim()) {
+        await db
+          .update(people)
+          .set({ name })
+          .where(eq(people.id, found[0].personId));
+      }
     }
   }
   if (!name) {

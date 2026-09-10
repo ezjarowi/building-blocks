@@ -66,10 +66,7 @@ export async function POST(request: Request) {
     expectedType?: string;
     notes?: string;
   };
-  const name = body.name?.trim();
-  if (!name) {
-    return NextResponse.json({ error: "Name required" }, { status: 400 });
-  }
+  const name = body.name?.trim() ?? "";
   const expectedType = body.expectedType?.trim().toUpperCase() || null;
   const notes = body.notes?.trim() || null;
 
