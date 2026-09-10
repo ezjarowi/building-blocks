@@ -41,7 +41,12 @@ export default async function ResultPage({
     <div className="flex min-h-full flex-col">
       <SiteHeader />
       <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-8">
-        <ResultView result={row.result as AssessmentResult} />
+        <ResultView
+          result={row.result as AssessmentResult}
+          name={row.respondentName}
+          gitSha={row.gitSha}
+          takenAt={row.createdAt}
+        />
       </main>
     </div>
   );

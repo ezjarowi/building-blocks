@@ -1,0 +1,47 @@
+import { desc, eq } from "drizzle-orm";
+import { NextResponse } from "next/server";
+import { isAdmin } from "@/lib/admin";
+import { getDb } from "@/lib/db";
+import { assessments, invites, people } from "@/lib/db/schema";
+import { invitePath } from "@/lib/invite-url";
+
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  if (!(await isAdmin())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { id } = await params;
+  const db = getDb();
+  const personRows = await db.select().from(people).where(eq(people.id, id)).limit(1);
+  const person = personRows[0];
+  if (!person) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+  const personInvites = await db
+    .select()
+    .from(invites)
+    .where(eq(invites.personId, id));
+  const takes = await db
+    .select()
+    .from(assessments)
+    .where(eq(assessments.personId, id))
+    .orderBy(desc(assessments.createdAt));
+
+  return NextResponse.json({
+    person,
+    token: personInvites[0]?.token ?? null,
+    path: personInvites[0] ? invitePath(personInvites[0].token) : null,
+    takes: takes.map((t) => ({
+      id: t.id,
+      typeCode: t.typeCode,
+      temperament: t.temperament,
+      stack: t.stack,
+      respondentName: t.respondentName,
+      gitSha: t.gitSha,
+      createdAt: t.createdAt,
+      answers: t.answers,
+    })),
+  });
+}

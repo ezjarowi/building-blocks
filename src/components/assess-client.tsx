@@ -6,8 +6,16 @@ import { run, type Answer } from "@/lib/assessment";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-export function AssessClient() {
+export function AssessClient({
+  inviteToken,
+  intendedName,
+}: {
+  inviteToken?: string | null;
+  intendedName?: string | null;
+}) {
   const router = useRouter();
+  const [name, setName] = useState("");
+  const [named, setNamed] = useState(false);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [seenInsight, setSeenInsight] = useState(0);
   const [saving, setSaving] = useState(false);
@@ -25,7 +33,11 @@ export function AssessClient() {
       const res = await fetch("/api/assessments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answers: nextAnswers }),
+        body: JSON.stringify({
+          answers: nextAnswers,
+          name,
+          inviteToken: inviteToken ?? undefined,
+        }),
       });
       if (!res.ok) {
         throw new Error("Could not save");
@@ -55,6 +67,44 @@ export function AssessClient() {
   function back() {
     setError(null);
     setAnswers((prev) => prev.slice(0, -1));
+  }
+
+  if (!named) {
+    return (
+      <form
+        className="flex flex-1 flex-col justify-center py-12"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!name.trim()) return;
+          setNamed(true);
+        }}
+      >
+        {intendedName ? (
+          <p className="text-sm text-muted-foreground">
+            This link was made for {intendedName}.
+          </p>
+        ) : null}
+        <h1 className="font-heading mt-3 text-4xl">What&apos;s your name?</h1>
+        <p className="mt-3 max-w-md text-sm text-muted-foreground">
+          So we remember who took it. No account.
+        </p>
+        <input
+          className="mt-8 h-12 w-full max-w-sm rounded-xl border border-input bg-card px-4 text-base outline-none ring-ring focus:ring-2"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          autoComplete="name"
+          autoFocus
+        />
+        <Button
+          type="submit"
+          className="mt-6 h-12 w-fit rounded-full px-6"
+          size="lg"
+          disabled={!name.trim()}
+        >
+          Continue
+        </Button>
+      </form>
+    );
   }
 
   if (saving) {

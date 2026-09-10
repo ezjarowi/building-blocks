@@ -14,7 +14,17 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-export function ResultView({ result }: { result: AssessmentResult }) {
+export function ResultView({
+  result,
+  name,
+  gitSha,
+  takenAt,
+}: {
+  result: AssessmentResult;
+  name?: string | null;
+  gitSha?: string | null;
+  takenAt?: Date | string | null;
+}) {
   const t = TEMPERAMENTS[result.temperament];
   const hero = result.stack[0] as FunctionId;
   const parent = result.stack[1] as FunctionId;
@@ -29,10 +39,20 @@ export function ResultView({ result }: { result: AssessmentResult }) {
           {t.name} · {t.want}
         </p>
         <h1 className="font-heading mt-3 text-5xl tracking-tight">{result.type}</h1>
+        {name ? (
+          <p className="mt-2 text-muted-foreground">{name}</p>
+        ) : null}
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted-foreground">
           {t.blurb} Your first four building blocks, in order:{" "}
           {result.stack.slice(0, 4).join(" · ")}.
         </p>
+        {gitSha || takenAt ? (
+          <p className="mt-3 text-xs text-muted-foreground">
+            {takenAt ? new Date(takenAt).toLocaleString() : null}
+            {takenAt && gitSha ? " · " : null}
+            {gitSha ? `test ${gitSha.slice(0, 7)}` : null}
+          </p>
+        ) : null}
       </div>
 
       <section className="space-y-4">
