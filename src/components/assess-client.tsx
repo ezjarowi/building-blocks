@@ -80,7 +80,8 @@ export function AssessClient({
     const nextName = (intendedName || draft?.name || "").trim();
     const nextGreet = inviteToken ? greet : Boolean(draft?.greet);
     const started = Boolean(draft?.named || (draft?.answers.length ?? 0) > 0);
-    const nextNamed = started || Boolean(nextName && !nextGreet);
+    const nextNamed =
+      started || Boolean(nextName && nextToken && !nextGreet);
     const restored = {
       token: nextToken,
       greet: nextGreet,
@@ -118,9 +119,8 @@ export function AssessClient({
   const insightKey = state.answered;
   const showInsight =
     Boolean(state.insight) && seenInsight < insightKey && !state.done;
-  const knownName = Boolean(name.trim());
-  const showNameAsk = !named && !knownName;
-  const showGreet = !named && knownName && doGreet;
+  const showGreet = !named && doGreet && Boolean(name.trim());
+  const showNameAsk = !named && !showGreet;
 
   async function finish(nextAnswers: Answer[]) {
     setSaving(true);
