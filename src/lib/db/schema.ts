@@ -43,6 +43,7 @@ export const assessments = pgTable("assessments", {
   personId: uuid("person_id").references(() => people.id),
   inviteId: uuid("invite_id").references(() => invites.id),
   gitSha: text("git_sha"),
+  quizVersion: text("quiz_version"),
   source: text("source"),
   verified: boolean("verified").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true })

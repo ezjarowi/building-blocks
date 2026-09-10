@@ -45,6 +45,7 @@ export default async function ResultPage({
           result={row.result as AssessmentResult}
           name={row.respondentName}
           gitSha={row.gitSha}
+          quizVersion={row.quizVersion}
           takenAt={row.createdAt}
         />
       </main>

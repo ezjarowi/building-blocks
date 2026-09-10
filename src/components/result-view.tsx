@@ -17,11 +17,13 @@ export function ResultView({
   result,
   name,
   gitSha,
+  quizVersion,
   takenAt,
 }: {
   result: AssessmentResult;
   name?: string | null;
   gitSha?: string | null;
+  quizVersion?: string | null;
   takenAt?: Date | string | null;
 }) {
   const t = TEMPERAMENTS[result.temperament];
@@ -47,11 +49,13 @@ export function ResultView({
           Based on how you answered, this looks like the order you prefer to
           work — most at home, down to what you can only do in a burst.
         </p>
-        {gitSha || takenAt ? (
+        {gitSha || quizVersion || takenAt ? (
           <p className="mt-3 text-xs text-muted-foreground">
             {takenAt ? new Date(takenAt).toLocaleString() : null}
-            {takenAt && gitSha ? " · " : null}
-            {gitSha ? `test ${gitSha.slice(0, 7)}` : null}
+            {takenAt && (quizVersion || gitSha) ? " · " : null}
+            {quizVersion ? `quiz ${quizVersion}` : null}
+            {quizVersion && gitSha ? " · " : null}
+            {gitSha ? gitSha.slice(0, 7) : null}
           </p>
         ) : null}
       </div>

@@ -24,6 +24,7 @@ export async function GET(request: Request) {
       stack: assessments.stack,
       respondentName: assessments.respondentName,
       gitSha: assessments.gitSha,
+      quizVersion: assessments.quizVersion,
       createdAt: assessments.createdAt,
     })
     .from(assessments)

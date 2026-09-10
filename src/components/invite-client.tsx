@@ -72,7 +72,7 @@ export function InviteClient({ embedded = false }: { embedded?: boolean }) {
         </DialogTitle>
         <DialogDescription>
           Unique link for one person. Copy it or text it. Name, guessed type,
-          and notes stay in Responses — not in the URL.
+          and notes stay in Admin — not in the URL.
         </DialogDescription>
       </DialogHeader>
     </>
@@ -81,7 +81,7 @@ export function InviteClient({ embedded = false }: { embedded?: boolean }) {
       <h1 className="font-heading text-4xl">Share Invite</h1>
       <p className="mt-3 max-w-md text-muted-foreground">
         Make a unique link for one person, then copy it or text it. Name,
-        guessed type, and notes stay in Responses — not in the URL.
+        guessed type, and notes stay in Admin — not in the URL.
       </p>
     </>
   );

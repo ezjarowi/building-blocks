@@ -15,6 +15,7 @@ type Take = {
   stack: string[];
   respondentName: string | null;
   gitSha: string | null;
+  quizVersion: string | null;
   createdAt: string;
 };
 
@@ -56,7 +57,7 @@ export function MyResponses() {
 
   return (
     <div className="py-8">
-      <h1 className="font-heading text-4xl">Responses</h1>
+      <h1 className="font-heading text-4xl">Admin</h1>
       <p className="mt-2 text-sm text-muted-foreground">
         Takes from this browser.
       </p>
@@ -82,8 +83,8 @@ export function MyResponses() {
                 {take.respondentName ? ` · ${take.respondentName}` : ""}
               </Link>
               <span className="text-sm text-muted-foreground">
-                {new Date(take.createdAt).toLocaleString()} ·{" "}
-                {shortSha(take.gitSha)}
+                {new Date(take.createdAt).toLocaleString()} · quiz{" "}
+                {take.quizVersion || shortSha(take.gitSha)}
               </span>
             </div>
           ))

@@ -1,3 +1,4 @@
+export * from "./quiz-version";
 export * from "./functions";
 export * from "./types";
 export * from "./questions";

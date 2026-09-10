@@ -12,7 +12,7 @@ export function SiteFooter() {
           Share Invite
         </ShareInviteOpen>
         <Link href="/responses" className="hover:text-muted-foreground">
-          Responses
+          Admin
         </Link>
       </span>
     </footer>

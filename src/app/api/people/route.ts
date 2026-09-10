@@ -48,6 +48,7 @@ export async function GET() {
       respondentName: t.respondentName,
       typeCode: t.typeCode,
       gitSha: t.gitSha,
+      quizVersion: t.quizVersion,
       verified: t.verified,
       source: t.source ?? (t.inviteId ? "shared" : "walk-in"),
       createdAt: t.createdAt,

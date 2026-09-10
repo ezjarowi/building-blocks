@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { run, type Answer } from "@/lib/assessment";
+import { QUIZ_VERSION, run, type Answer } from "@/lib/assessment";
 import { getDb } from "@/lib/db";
 import { assessments, invites, people } from "@/lib/db/schema";
 import { testVersion } from "@/lib/version";
@@ -65,6 +65,7 @@ export async function POST(request: Request) {
       personId,
       inviteId,
       gitSha: testVersion(),
+      quizVersion: QUIZ_VERSION,
       source: inviteId ? "shared" : "walk-in",
     })
     .returning({ id: assessments.id });

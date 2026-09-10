@@ -36,6 +36,7 @@ type Take = {
   stack: string[];
   respondentName: string | null;
   gitSha: string | null;
+  quizVersion: string | null;
   verified: boolean;
   source: string | null;
   createdAt: string;
@@ -46,6 +47,7 @@ type Unlinked = {
   respondentName: string | null;
   typeCode: string;
   gitSha: string | null;
+  quizVersion: string | null;
   verified: boolean;
   source: string | null;
   createdAt: string;
@@ -234,7 +236,8 @@ function PersonRecord({
                   Verified
                 </label>
                 <span className="text-muted-foreground">
-                  {sourceLabel(take.source)} · {shortSha(take.gitSha)} ·{" "}
+                  {sourceLabel(take.source)} · quiz{" "}
+                  {take.quizVersion || shortSha(take.gitSha)} ·{" "}
                   {new Date(take.createdAt).toLocaleString()}
                 </span>
                 <button
@@ -318,7 +321,7 @@ export function AdminDashboard() {
   return (
     <div className="py-8">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <h1 className="font-heading text-4xl">All responses</h1>
+        <h1 className="font-heading text-4xl">Admin</h1>
         <button
           type="button"
           className="text-sm text-muted-foreground underline-offset-4 hover:underline"
@@ -386,7 +389,7 @@ export function AdminDashboard() {
                   Verified
                 </label>
                 <span className="text-muted-foreground">
-                  {shortSha(take.gitSha)} ·{" "}
+                  quiz {take.quizVersion || shortSha(take.gitSha)} ·{" "}
                   {new Date(take.createdAt).toLocaleString()}
                 </span>
                 <button

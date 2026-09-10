@@ -40,6 +40,7 @@ export async function GET(
       stack: t.stack,
       respondentName: t.respondentName,
       gitSha: t.gitSha,
+      quizVersion: t.quizVersion,
       verified: t.verified,
       source: t.source ?? (t.inviteId ? "shared" : "walk-in"),
       createdAt: t.createdAt,
