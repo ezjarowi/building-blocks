@@ -9,7 +9,6 @@ import {
   type AssessmentResult,
   type FunctionId,
 } from "@/lib/assessment";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -43,8 +42,8 @@ export function ResultView({
           <p className="mt-2 text-muted-foreground">{name}</p>
         ) : null}
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted-foreground">
-          {t.blurb} Your first four building blocks, in order:{" "}
-          {result.stack.slice(0, 4).join(" · ")}.
+          Based on how you answered, this looks like the order you prefer to
+          work — most at home, down to what you can only do in a burst.
         </p>
         {gitSha || takenAt ? (
           <p className="mt-3 text-xs text-muted-foreground">
@@ -56,27 +55,22 @@ export function ResultView({
       </div>
 
       <section className="space-y-4">
-        <h2 className="font-heading text-2xl">The four you prefer</h2>
-        <div className="grid gap-3">
+        <ol className="space-y-4">
           {result.stack.slice(0, 4).map((id, i) => {
             const fn = FUNCTIONS[id as FunctionId];
             const role = ROLE_LABELS[i];
             return (
-              <Card key={id} className="px-5 py-5">
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <p className="font-heading text-xl">
-                    {i + 1}. {id}
-                  </p>
-                  <Badge variant="secondary">{role.name}</Badge>
-                </div>
-                <p className="mt-1 font-medium">{fn.short}</p>
-                <p className="mt-2 text-muted-foreground leading-relaxed">
-                  {role.brief} {fn.blurb}
+              <li key={id}>
+                <p className="font-heading text-xl">
+                  {i + 1}. {id} · {fn.name}
                 </p>
-              </Card>
+                <p className="mt-1 text-muted-foreground">
+                  <span className="text-foreground">{role.name}.</span> {fn.want}
+                </p>
+              </li>
             );
           })}
-        </div>
+        </ol>
       </section>
 
       <section className="space-y-4">
