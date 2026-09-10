@@ -5,9 +5,9 @@ import { BlockMark } from "@/components/block-mark";
 export function SiteHeader({ quiet = false }: { quiet?: boolean }) {
   return (
     <header className="mx-auto flex w-full max-w-3xl items-center justify-between px-6 py-6">
-      <Link href="/" className="font-heading flex items-center gap-2.5 text-lg tracking-tight">
+      <Link href="/" className="font-heading flex items-center gap-2.5 text-base tracking-tight sm:text-lg">
         <BlockMark />
-        Building Blocks
+        Benson&apos;s personality test
       </Link>
       {quiet ? (
         <span className="text-muted-foreground text-sm">No wrong answers</span>

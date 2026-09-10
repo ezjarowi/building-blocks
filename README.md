@@ -1,4 +1,4 @@
-# Building Blocks
+# Benson's personality test
 
 A personality assessment for eight cognitive building blocks — what a mind actually prefers, in order.
 

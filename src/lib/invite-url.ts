@@ -9,8 +9,8 @@ export function inviteUrl(token: string, origin: string) {
 export function inviteText(name: string, url: string) {
   const who = name.trim();
   const line = who
-    ? `Hey ${who}, take this personality test I found`
-    : `Hey, take this personality test I found`;
+    ? `Hey ${who}, take Benson's personality test`
+    : `Hey, take Benson's personality test`;
   const short = url.replace(/^https:\/\//i, "");
   return `${line}\n\n${short}`;
 }

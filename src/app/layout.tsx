@@ -22,9 +22,9 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Building Blocks — a 16-question preference map",
+  title: "Benson's personality test",
   description:
-    "Sixteen questions. Every answer is a good one. Find the four cognitive building blocks you actually prefer — not the ones a résumé would like.",
+    "Benson's personality test. Twenty questions or fewer. Every answer is a good one. Find the eight cognitive building blocks you actually prefer — not the ones a résumé would like.",
   robots: allowIndexing
     ? { index: true, follow: true }
     : { index: false, follow: false, nocache: true },
