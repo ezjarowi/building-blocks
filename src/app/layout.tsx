@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { ShareInviteProvider } from "@/components/invite-modal";
 import { allowIndexing } from "@/lib/indexing";
+import { BRAND, BRAND_DESCRIPTION, SITE_URL } from "@/lib/brand";
 import { LOOK_BOOT } from "@/lib/looks";
 
 const geistSans = Geist({
@@ -22,12 +23,38 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Benson's personality test",
-  description:
-    "Benson's personality test. Twenty questions or fewer. Every answer is a good one. Find the eight cognitive building blocks you actually prefer — not the ones a résumé would like.",
+  metadataBase: new URL(SITE_URL),
+  title: BRAND,
+  description: BRAND_DESCRIPTION,
+  applicationName: BRAND,
   robots: allowIndexing
     ? { index: true, follow: true }
     : { index: false, follow: false, nocache: true },
+  openGraph: {
+    title: BRAND,
+    description: BRAND_DESCRIPTION,
+    siteName: BRAND,
+    type: "website",
+    locale: "en_US",
+    url: SITE_URL,
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: BRAND,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: BRAND,
+    description: BRAND_DESCRIPTION,
+    images: ["/og.png"],
+  },
+  appleWebApp: {
+    title: BRAND,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

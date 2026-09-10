@@ -1,3 +1,5 @@
+import { BRAND } from "@/lib/brand";
+
 export function invitePath(token: string) {
   return `/s/${encodeURIComponent(token)}`;
 }
@@ -9,8 +11,8 @@ export function inviteUrl(token: string, origin: string) {
 export function inviteText(name: string, url: string) {
   const who = name.trim();
   const line = who
-    ? `Hey ${who}, take Benson's personality test`
-    : `Hey, take Benson's personality test`;
+    ? `Hey ${who}, take ${BRAND}`
+    : `Hey, take ${BRAND}`;
   const short = url.replace(/^https:\/\//i, "");
   return `${line}\n\n${short}`;
 }

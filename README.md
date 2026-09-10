@@ -1,4 +1,4 @@
-# Benson's personality test
+# Benson's Talent Blueprint
 
 A personality assessment for eight cognitive building blocks — what a mind actually prefers, in order.
 
