@@ -1,5 +1,3 @@
-import { BRAND } from "@/lib/brand";
-
 export function invitePath(token: string) {
   return `/s/${encodeURIComponent(token)}`;
 }
@@ -11,9 +9,10 @@ export function inviteUrl(token: string, origin: string) {
 export function inviteText(name: string, url: string) {
   const who = name.trim();
   const line = who
-    ? `Hey ${who}, take ${BRAND}`
-    : `Hey, take ${BRAND}`;
-  return `${line}\n\n${url}`;
+    ? `Hey ${who}, take this personality test I found`
+    : `Hey, take this personality test I found`;
+  const short = url.replace(/^https:\/\//i, "");
+  return `${line}\n\n${short}`;
 }
 
 export function smsHref(body: string) {
