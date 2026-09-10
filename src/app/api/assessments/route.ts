@@ -65,6 +65,7 @@ export async function POST(request: Request) {
       personId,
       inviteId,
       gitSha: testVersion(),
+      source: inviteId ? "shared" : "walk-in",
     })
     .returning({ id: assessments.id });
 

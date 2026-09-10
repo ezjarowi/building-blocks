@@ -24,6 +24,7 @@ type PersonRow = {
   latestAt: string | null;
   latestName: string | null;
   latestVerified: boolean;
+  latestSource: string | null;
   createdIp: string | null;
 };
 
@@ -35,6 +36,7 @@ type Take = {
   respondentName: string | null;
   gitSha: string | null;
   verified: boolean;
+  source: string | null;
   createdAt: string;
 };
 
@@ -44,8 +46,13 @@ type Unlinked = {
   typeCode: string;
   gitSha: string | null;
   verified: boolean;
+  source: string | null;
   createdAt: string;
 };
+
+function sourceLabel(source: string | null | undefined) {
+  return source === "shared" ? "Shared" : "Walk-in";
+}
 
 export function AdminDashboard() {
   const [name, setName] = useState("");
@@ -226,7 +233,7 @@ export function AdminDashboard() {
                     : "No guessed type"}
                   {person.takeCount === 0
                     ? " · not taken yet"
-                    : ` · ${person.takeCount} take${person.takeCount === 1 ? "" : "s"} · got ${person.latestType}`}
+                    : ` · ${person.takeCount} take${person.takeCount === 1 ? "" : "s"} · got ${person.latestType} · ${sourceLabel(person.latestSource)}`}
                   {person.expectedType &&
                   person.latestType &&
                   person.expectedType === person.latestType
@@ -292,7 +299,7 @@ export function AdminDashboard() {
                         Verified
                       </label>
                       <span className="text-muted-foreground">
-                        {shortSha(take.gitSha)} ·{" "}
+                        {sourceLabel(take.source)} · {shortSha(take.gitSha)} ·{" "}
                         {new Date(take.createdAt).toLocaleString()}
                       </span>
                     </div>
@@ -320,7 +327,8 @@ export function AdminDashboard() {
                   href={`/result/${take.id}`}
                   className="underline-offset-4 hover:underline"
                 >
-                  {take.respondentName || "No name"} · {take.typeCode}
+                  {take.respondentName || "No name"} · {take.typeCode} ·{" "}
+                  {sourceLabel(take.source)}
                 </Link>
                 <label className="flex items-center gap-2 text-muted-foreground">
                   <input

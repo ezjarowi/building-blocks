@@ -41,6 +41,7 @@ export async function GET(
       respondentName: t.respondentName,
       gitSha: t.gitSha,
       verified: t.verified,
+      source: t.source ?? (t.inviteId ? "shared" : "walk-in"),
       createdAt: t.createdAt,
       answers: t.answers,
     })),

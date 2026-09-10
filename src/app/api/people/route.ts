@@ -37,6 +37,7 @@ export async function GET() {
       latestAt: latest?.createdAt ?? null,
       latestName: latest?.respondentName ?? null,
       latestVerified: latest?.verified ?? false,
+      latestSource: latest?.source ?? (latest?.inviteId ? "shared" : "walk-in"),
     };
   });
 
@@ -48,6 +49,7 @@ export async function GET() {
       typeCode: t.typeCode,
       gitSha: t.gitSha,
       verified: t.verified,
+      source: t.source ?? (t.inviteId ? "shared" : "walk-in"),
       createdAt: t.createdAt,
     }));
 
