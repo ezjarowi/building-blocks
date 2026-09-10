@@ -37,7 +37,7 @@ export function TakeItLink({ className }: { className?: string }) {
   );
 }
 
-export function StartCta() {
+export function StartCta({ className }: { className?: string }) {
   const href = useSyncExternalStore(subscribe, pathSnapshot, pathServer);
   const continuing = useSyncExternalStore(
     subscribe,
@@ -45,7 +45,7 @@ export function StartCta() {
     progressServer,
   );
   return (
-    <Link href={href}>
+    <Link href={href} className={className}>
       {continuing ? "Continue where you left off" : "Start — it's a party game"}
     </Link>
   );
