@@ -7,11 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TypeCharts } from "@/components/type-charts";
+import { TypePicker } from "@/components/type-picker";
 import { shortSha } from "@/lib/version";
 
 type PersonRow = {
   id: string;
   name: string;
+  expectedType: string | null;
+  notes: string | null;
   createdAt: string;
   token: string | null;
   path: string | null;
@@ -19,6 +23,7 @@ type PersonRow = {
   latestType: string | null;
   latestAt: string | null;
   latestName: string | null;
+  latestVerified: boolean;
 };
 
 type Take = {
@@ -28,6 +33,7 @@ type Take = {
   stack: string[];
   respondentName: string | null;
   gitSha: string | null;
+  verified: boolean;
   createdAt: string;
 };
 
@@ -36,16 +42,21 @@ type Unlinked = {
   respondentName: string | null;
   typeCode: string;
   gitSha: string | null;
+  verified: boolean;
   createdAt: string;
 };
 
 export function AdminDashboard() {
   const router = useRouter();
   const [name, setName] = useState("");
+  const [expectedType, setExpectedType] = useState("");
+  const [notes, setNotes] = useState("");
   const [people, setPeople] = useState<PersonRow[]>([]);
   const [unlinked, setUnlinked] = useState<Unlinked[]>([]);
+  const [typeCounts, setTypeCounts] = useState<Record<string, number>>({});
   const [openId, setOpenId] = useState<string | null>(null);
   const [takes, setTakes] = useState<Take[] | null>(null);
+  const [editNotes, setEditNotes] = useState("");
   const [copied, setCopied] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -58,9 +69,11 @@ export function AdminDashboard() {
     const data = (await res.json()) as {
       people: PersonRow[];
       unlinked?: Unlinked[];
+      typeCounts?: Record<string, number>;
     };
     setPeople(data.people);
     setUnlinked(data.unlinked ?? []);
+    setTypeCounts(data.typeCounts ?? {});
   }
 
   useEffect(() => {
@@ -73,13 +86,15 @@ export function AdminDashboard() {
     const res = await fetch("/api/people", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, expectedType, notes }),
     });
     if (!res.ok) {
       setError("Could not add person.");
       return;
     }
     setName("");
+    setExpectedType("");
+    setNotes("");
     await load();
   }
 
@@ -97,10 +112,38 @@ export function AdminDashboard() {
       return;
     }
     setOpenId(id);
+    const person = people.find((p) => p.id === id);
+    setEditNotes(person?.notes ?? "");
     const res = await fetch(`/api/people/${id}`);
     if (!res.ok) return;
-    const data = (await res.json()) as { takes: Take[] };
+    const data = (await res.json()) as { takes: Take[]; person?: PersonRow };
     setTakes(data.takes);
+    if (data.person?.notes != null) setEditNotes(data.person.notes);
+  }
+
+  async function saveNotes(id: string) {
+    await fetch(`/api/people/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ notes: editNotes }),
+    });
+    await load();
+  }
+
+  async function toggleVerified(takeId: string, verified: boolean) {
+    await fetch(`/api/assessments/${takeId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ verified }),
+    });
+    setTakes((prev) =>
+      prev
+        ? prev.map((t) => (t.id === takeId ? { ...t, verified } : t))
+        : prev,
+    );
+    setUnlinked((prev) =>
+      prev.map((t) => (t.id === takeId ? { ...t, verified } : t)),
+    );
   }
 
   return (
@@ -124,20 +167,39 @@ export function AdminDashboard() {
         Same person can take it more than once.
       </p>
 
-      <form onSubmit={addPerson} className="mt-8 flex flex-wrap items-end gap-3">
+      <TypeCharts counts={typeCounts} />
+
+      <form onSubmit={addPerson} className="mt-8 space-y-3">
+        <div className="flex flex-wrap items-end gap-3">
+          <div className="space-y-2">
+            <Label htmlFor="person">Name</Label>
+            <Input
+              id="person"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Sarah"
+              className="w-56"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Type you think they are</Label>
+            <TypePicker value={expectedType} onChange={setExpectedType} />
+          </div>
+          <Button type="submit" className="rounded-full">
+            Add + make link
+          </Button>
+        </div>
         <div className="space-y-2">
-          <Label htmlFor="person">Name</Label>
-          <Input
-            id="person"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Sarah"
-            className="w-56"
+          <Label htmlFor="notes">Notes</Label>
+          <textarea
+            id="notes"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={2}
+            className="w-full max-w-xl rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+            placeholder="Optional"
           />
         </div>
-        <Button type="submit" className="rounded-full">
-          Add + make link
-        </Button>
       </form>
       {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
 
@@ -151,9 +213,17 @@ export function AdminDashboard() {
               <div>
                 <p className="font-heading text-xl">{person.name}</p>
                 <p className="text-sm text-muted-foreground">
+                  {person.expectedType
+                    ? `Thought ${person.expectedType}`
+                    : "No guessed type"}
                   {person.takeCount === 0
-                    ? "Not taken yet"
-                    : `${person.takeCount} take${person.takeCount === 1 ? "" : "s"} · latest ${person.latestType}${person.latestName ? ` as “${person.latestName}”` : ""}`}
+                    ? " · not taken yet"
+                    : ` · ${person.takeCount} take${person.takeCount === 1 ? "" : "s"} · got ${person.latestType}`}
+                  {person.expectedType &&
+                  person.latestType &&
+                  person.expectedType === person.latestType
+                    ? " · match"
+                    : ""}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -203,14 +273,24 @@ export function AdminDashboard() {
               </div>
             </div>
             {openId === person.id && takes ? (
-              <div className="mt-4 space-y-2 border-t border-border pt-4">
+              <div className="mt-4 space-y-3 border-t border-border pt-4">
+                <div className="space-y-2">
+                  <Label>Notes</Label>
+                  <textarea
+                    value={editNotes}
+                    onChange={(e) => setEditNotes(e.target.value)}
+                    onBlur={() => saveNotes(person.id)}
+                    rows={2}
+                    className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+                  />
+                </div>
                 {takes.length === 0 ? (
                   <p className="text-sm text-muted-foreground">No responses yet.</p>
                 ) : (
                   takes.map((take) => (
                     <div
                       key={take.id}
-                      className="flex flex-wrap items-baseline justify-between gap-2 text-sm"
+                      className="flex flex-wrap items-center justify-between gap-2 text-sm"
                     >
                       <Link
                         href={`/result/${take.id}`}
@@ -218,8 +298,18 @@ export function AdminDashboard() {
                       >
                         {take.typeCode} · {take.stack.slice(0, 4).join(" ")}
                       </Link>
+                      <label className="flex items-center gap-2 text-muted-foreground">
+                        <input
+                          type="checkbox"
+                          checked={take.verified}
+                          onChange={(e) =>
+                            toggleVerified(take.id, e.target.checked)
+                          }
+                        />
+                        Verified
+                      </label>
                       <span className="text-muted-foreground">
-                        {take.respondentName} · {shortSha(take.gitSha)} ·{" "}
+                        {shortSha(take.gitSha)} ·{" "}
                         {new Date(take.createdAt).toLocaleString()}
                       </span>
                     </div>
@@ -249,6 +339,14 @@ export function AdminDashboard() {
                 >
                   {take.respondentName || "No name"} · {take.typeCode}
                 </Link>
+                <label className="flex items-center gap-2 text-muted-foreground">
+                  <input
+                    type="checkbox"
+                    checked={take.verified}
+                    onChange={(e) => toggleVerified(take.id, e.target.checked)}
+                  />
+                  Verified
+                </label>
                 <span className="text-muted-foreground">
                   {shortSha(take.gitSha)} ·{" "}
                   {new Date(take.createdAt).toLocaleString()}

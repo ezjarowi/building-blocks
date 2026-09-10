@@ -25,6 +25,8 @@ export async function GET() {
     return {
       id: person.id,
       name: person.name,
+      expectedType: person.expectedType,
+      notes: person.notes,
       createdAt: person.createdAt,
       token: personInvites[0]?.token ?? null,
       path: personInvites[0] ? invitePath(personInvites[0].token) : null,
@@ -32,6 +34,7 @@ export async function GET() {
       latestType: latest?.typeCode ?? null,
       latestAt: latest?.createdAt ?? null,
       latestName: latest?.respondentName ?? null,
+      latestVerified: latest?.verified ?? false,
     };
   });
 
@@ -42,24 +45,39 @@ export async function GET() {
       respondentName: t.respondentName,
       typeCode: t.typeCode,
       gitSha: t.gitSha,
+      verified: t.verified,
       createdAt: t.createdAt,
     }));
 
-  return NextResponse.json({ people: rows, unlinked });
+  const typeCounts: Record<string, number> = {};
+  for (const take of allTakes) {
+    typeCounts[take.typeCode] = (typeCounts[take.typeCode] ?? 0) + 1;
+  }
+
+  return NextResponse.json({ people: rows, unlinked, typeCounts });
 }
 
 export async function POST(request: Request) {
   if (!(await isAdmin())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const body = (await request.json()) as { name?: string };
+  const body = (await request.json()) as {
+    name?: string;
+    expectedType?: string;
+    notes?: string;
+  };
   const name = body.name?.trim();
   if (!name) {
     return NextResponse.json({ error: "Name required" }, { status: 400 });
   }
+  const expectedType = body.expectedType?.trim().toUpperCase() || null;
+  const notes = body.notes?.trim() || null;
 
   const db = getDb();
-  const [person] = await db.insert(people).values({ name }).returning();
+  const [person] = await db
+    .insert(people)
+    .values({ name, expectedType, notes })
+    .returning();
   const token = randomBytes(9).toString("base64url");
   await db.insert(invites).values({ token, personId: person.id });
 

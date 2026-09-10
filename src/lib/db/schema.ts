@@ -1,8 +1,18 @@
-import { integer, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const people = pgTable("people", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
+  expectedType: text("expected_type"),
+  notes: text("notes"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -32,6 +42,7 @@ export const assessments = pgTable("assessments", {
   personId: uuid("person_id").references(() => people.id),
   inviteId: uuid("invite_id").references(() => invites.id),
   gitSha: text("git_sha"),
+  verified: boolean("verified").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

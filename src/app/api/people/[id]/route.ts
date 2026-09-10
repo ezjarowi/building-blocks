@@ -40,8 +40,38 @@ export async function GET(
       stack: t.stack,
       respondentName: t.respondentName,
       gitSha: t.gitSha,
+      verified: t.verified,
       createdAt: t.createdAt,
       answers: t.answers,
     })),
   });
+}
+
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  if (!(await isAdmin())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { id } = await params;
+  const body = (await request.json()) as {
+    notes?: string;
+    expectedType?: string;
+  };
+  const db = getDb();
+  const patch: { notes?: string | null; expectedType?: string | null } = {};
+  if ("notes" in body) patch.notes = body.notes?.trim() || null;
+  if ("expectedType" in body) {
+    patch.expectedType = body.expectedType?.trim().toUpperCase() || null;
+  }
+  const [updated] = await db
+    .update(people)
+    .set(patch)
+    .where(eq(people.id, id))
+    .returning();
+  if (!updated) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+  return NextResponse.json(updated);
 }
