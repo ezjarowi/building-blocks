@@ -29,14 +29,13 @@ export const metadata: Metadata = {
   applicationName: BRAND,
   robots: allowIndexing
     ? { index: true, follow: true }
-    : { index: false, follow: false, nocache: true },
+    : { index: false, follow: true },
   openGraph: {
     title: BRAND,
     description: BRAND_DESCRIPTION,
     siteName: BRAND,
     type: "website",
     locale: "en_US",
-    url: SITE_URL,
     images: [
       {
         url: "/og.png",

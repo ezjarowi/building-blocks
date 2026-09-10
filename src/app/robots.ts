@@ -1,22 +1,15 @@
 import type { MetadataRoute } from "next";
 import { allowIndexing } from "@/lib/indexing";
 
-const PREVIEW_BOTS = [
-  "facebookexternalhit",
-  "Facebot",
-  "Twitterbot",
-  "WhatsApp",
-  "Slackbot-LinkExpanding",
-  "LinkedInBot",
-  "Discordbot",
-];
+const SEARCH_BOTS = ["Googlebot", "Googlebot-Image", "Bingbot", "Slurp", "DuckDuckBot"];
+const PRIVATE = ["/admin", "/api/", "/responses"];
 
 export default function robots(): MetadataRoute.Robots {
   if (!allowIndexing) {
     return {
       rules: [
-        { userAgent: PREVIEW_BOTS, allow: "/" },
-        { userAgent: "*", disallow: "/" },
+        { userAgent: SEARCH_BOTS, disallow: "/" },
+        { userAgent: "*", allow: "/", disallow: PRIVATE },
       ],
     };
   }
@@ -24,7 +17,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin", "/api/", "/responses"],
+      disallow: PRIVATE,
     },
   };
 }

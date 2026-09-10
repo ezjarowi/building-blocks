@@ -13,8 +13,7 @@ export function inviteText(name: string, url: string) {
   const line = who
     ? `Hey ${who}, take ${BRAND}`
     : `Hey, take ${BRAND}`;
-  const short = url.replace(/^https:\/\//i, "");
-  return `${line}\n\n${short}`;
+  return `${line}\n\n${url}`;
 }
 
 export function smsHref(body: string) {
