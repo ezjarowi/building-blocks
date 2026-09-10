@@ -4,7 +4,7 @@ import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { ShareInviteProvider } from "@/components/invite-modal";
 import { allowIndexing } from "@/lib/indexing";
-import { BRAND, BRAND_DESCRIPTION, SITE_URL } from "@/lib/brand";
+import { BRAND, BRAND_DESCRIPTION, OG_IMAGE, SITE_URL } from "@/lib/brand";
 import { LOOK_BOOT } from "@/lib/looks";
 
 const geistSans = Geist({
@@ -36,18 +36,11 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/og.jpg",
+        url: OG_IMAGE,
         width: 1200,
         height: 630,
         alt: BRAND,
         type: "image/jpeg",
-      },
-      {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
-        alt: BRAND,
-        type: "image/png",
       },
     ],
   },
@@ -55,7 +48,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: BRAND,
     description: BRAND_DESCRIPTION,
-    images: ["/og.jpg"],
+    images: [OG_IMAGE],
+  },
+  icons: {
+    apple: "/apple-touch-icon.png",
   },
   appleWebApp: {
     title: BRAND,

@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { BRAND, BRAND_DESCRIPTION, SITE_URL } from "@/lib/brand";
+import { BRAND, BRAND_DESCRIPTION, OG_IMAGE, SITE_URL } from "@/lib/brand";
 
 const CRAWLER =
   /facebookexternalhit|Facebot|Twitterbot|WhatsApp|Slackbot|LinkedInBot|Discordbot|Applebot|SkypeUriPreview|Embedly|TelegramBot|Iframely|Pinterest|redditbot|Google-InspectionTool|YahooMailProxy|Viber|MicroMessenger|Snapchat|iMessage/i;
@@ -8,17 +8,21 @@ export function middleware(req: NextRequest) {
   const ua = req.headers.get("user-agent") ?? "";
   if (!CRAWLER.test(ua)) return NextResponse.next();
 
+  const pageUrl = `${SITE_URL}${req.nextUrl.pathname}`;
   const html = `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
 <title>${escapeHtml(BRAND)}</title>
 <meta name="description" content="${escapeHtml(BRAND_DESCRIPTION)}"/>
+<link rel="apple-touch-icon" href="${SITE_URL}/apple-touch-icon.png"/>
 <meta property="og:title" content="${escapeHtml(BRAND)}"/>
 <meta property="og:description" content="${escapeHtml(BRAND_DESCRIPTION)}"/>
 <meta property="og:site_name" content="${escapeHtml(BRAND)}"/>
 <meta property="og:type" content="website"/>
-<meta property="og:image" content="${SITE_URL}/og.jpg"/>
+<meta property="og:url" content="${escapeHtml(pageUrl)}"/>
+<meta property="og:image" content="${OG_IMAGE}"/>
+<meta property="og:image:secure_url" content="${OG_IMAGE}"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
 <meta property="og:image:type" content="image/jpeg"/>
@@ -26,7 +30,7 @@ export function middleware(req: NextRequest) {
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="${escapeHtml(BRAND)}"/>
 <meta name="twitter:description" content="${escapeHtml(BRAND_DESCRIPTION)}"/>
-<meta name="twitter:image" content="${SITE_URL}/og.jpg"/>
+<meta name="twitter:image" content="${OG_IMAGE}"/>
 </head>
 <body>
 <h1>${escapeHtml(BRAND)}</h1>
@@ -51,5 +55,7 @@ function escapeHtml(value: string) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|og\\.png|og\\.jpg|robots.txt).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|apple-touch-icon.png|og\\.png|og\\.jpg|robots.txt).*)",
+  ],
 };
