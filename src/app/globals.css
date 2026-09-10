@@ -225,6 +225,174 @@ html.dark[data-theme="studio"] {
   --ring: oklch(0.7 0.05 140);
 }
 
+html[data-theme="modern"] {
+  --background: oklch(0.985 0.006 250);
+  --foreground: oklch(0.22 0.03 260);
+  --card: oklch(1 0.004 250);
+  --card-foreground: oklch(0.22 0.03 260);
+  --popover: oklch(1 0.004 250);
+  --popover-foreground: oklch(0.22 0.03 260);
+  --primary: oklch(0.38 0.08 255);
+  --primary-foreground: oklch(0.98 0.01 250);
+  --secondary: oklch(0.94 0.015 250);
+  --secondary-foreground: oklch(0.28 0.04 260);
+  --muted: oklch(0.945 0.012 250);
+  --muted-foreground: oklch(0.5 0.03 260);
+  --accent: oklch(0.93 0.02 240);
+  --accent-foreground: oklch(0.25 0.04 255);
+  --border: oklch(0.88 0.015 250);
+  --input: oklch(0.88 0.015 250);
+  --ring: oklch(0.5 0.08 255);
+  --radius: 0.55rem;
+  --font-heading: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+}
+
+html.dark[data-theme="modern"] {
+  --background: oklch(0.18 0.02 255);
+  --foreground: oklch(0.94 0.01 250);
+  --card: oklch(0.22 0.02 255);
+  --card-foreground: oklch(0.94 0.01 250);
+  --popover: oklch(0.22 0.02 255);
+  --popover-foreground: oklch(0.94 0.01 250);
+  --primary: oklch(0.72 0.08 240);
+  --primary-foreground: oklch(0.16 0.03 255);
+  --secondary: oklch(0.26 0.02 255);
+  --secondary-foreground: oklch(0.92 0.01 250);
+  --muted: oklch(0.26 0.02 255);
+  --muted-foreground: oklch(0.72 0.02 250);
+  --accent: oklch(0.28 0.03 250);
+  --accent-foreground: oklch(0.94 0.01 250);
+  --border: oklch(0.32 0.02 255);
+  --input: oklch(0.32 0.02 255);
+  --ring: oklch(0.68 0.08 240);
+}
+
+html[data-theme="playful"] {
+  --background: oklch(0.97 0.03 55);
+  --foreground: oklch(0.3 0.06 30);
+  --card: oklch(0.99 0.02 55);
+  --card-foreground: oklch(0.3 0.06 30);
+  --popover: oklch(0.99 0.02 55);
+  --popover-foreground: oklch(0.3 0.06 30);
+  --primary: oklch(0.55 0.16 25);
+  --primary-foreground: oklch(0.99 0.02 55);
+  --secondary: oklch(0.93 0.05 70);
+  --secondary-foreground: oklch(0.32 0.07 35);
+  --muted: oklch(0.94 0.04 60);
+  --muted-foreground: oklch(0.5 0.05 40);
+  --accent: oklch(0.92 0.07 40);
+  --accent-foreground: oklch(0.32 0.08 30);
+  --border: oklch(0.88 0.04 50);
+  --input: oklch(0.88 0.04 50);
+  --ring: oklch(0.6 0.14 25);
+  --radius: 1.15rem;
+  --font-heading: "Fraunces", "Fraunces Fallback", ui-serif, Georgia, serif;
+}
+
+html.dark[data-theme="playful"] {
+  --background: oklch(0.22 0.04 30);
+  --foreground: oklch(0.95 0.02 70);
+  --card: oklch(0.26 0.04 30);
+  --card-foreground: oklch(0.95 0.02 70);
+  --popover: oklch(0.26 0.04 30);
+  --popover-foreground: oklch(0.95 0.02 70);
+  --primary: oklch(0.72 0.14 30);
+  --primary-foreground: oklch(0.2 0.04 30);
+  --secondary: oklch(0.3 0.04 35);
+  --secondary-foreground: oklch(0.94 0.02 70);
+  --muted: oklch(0.3 0.04 35);
+  --muted-foreground: oklch(0.76 0.03 60);
+  --accent: oklch(0.32 0.05 35);
+  --accent-foreground: oklch(0.95 0.02 70);
+  --border: oklch(0.36 0.04 35);
+  --input: oklch(0.36 0.04 35);
+  --ring: oklch(0.7 0.12 30);
+}
+
+html[data-theme="circuit"] {
+  --background: oklch(0.97 0.012 210);
+  --foreground: oklch(0.22 0.04 220);
+  --card: oklch(0.99 0.008 210);
+  --card-foreground: oklch(0.22 0.04 220);
+  --popover: oklch(0.99 0.008 210);
+  --popover-foreground: oklch(0.22 0.04 220);
+  --primary: oklch(0.42 0.1 195);
+  --primary-foreground: oklch(0.98 0.02 200);
+  --secondary: oklch(0.93 0.02 210);
+  --secondary-foreground: oklch(0.26 0.04 220);
+  --muted: oklch(0.94 0.015 210);
+  --muted-foreground: oklch(0.48 0.04 220);
+  --accent: oklch(0.92 0.03 195);
+  --accent-foreground: oklch(0.26 0.05 200);
+  --border: oklch(0.86 0.02 210);
+  --input: oklch(0.86 0.02 210);
+  --ring: oklch(0.5 0.1 195);
+  --radius: 0.28rem;
+  --font-heading: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+}
+
+html.dark[data-theme="circuit"] {
+  --background: oklch(0.16 0.025 230);
+  --foreground: oklch(0.93 0.02 200);
+  --card: oklch(0.2 0.03 230);
+  --card-foreground: oklch(0.93 0.02 200);
+  --popover: oklch(0.2 0.03 230);
+  --popover-foreground: oklch(0.93 0.02 200);
+  --primary: oklch(0.74 0.12 185);
+  --primary-foreground: oklch(0.16 0.03 220);
+  --secondary: oklch(0.24 0.03 230);
+  --secondary-foreground: oklch(0.92 0.02 200);
+  --muted: oklch(0.24 0.03 230);
+  --muted-foreground: oklch(0.72 0.03 210);
+  --accent: oklch(0.26 0.04 210);
+  --accent-foreground: oklch(0.93 0.02 200);
+  --border: oklch(0.32 0.03 230);
+  --input: oklch(0.32 0.03 230);
+  --ring: oklch(0.7 0.12 185);
+}
+
+html[data-theme="ink"] {
+  --background: oklch(0.96 0.02 90);
+  --foreground: oklch(0.17 0.02 40);
+  --card: oklch(0.98 0.015 90);
+  --card-foreground: oklch(0.17 0.02 40);
+  --popover: oklch(0.98 0.015 90);
+  --popover-foreground: oklch(0.17 0.02 40);
+  --primary: oklch(0.2 0.03 40);
+  --primary-foreground: oklch(0.97 0.02 90);
+  --secondary: oklch(0.92 0.02 90);
+  --secondary-foreground: oklch(0.22 0.03 40);
+  --muted: oklch(0.93 0.02 90);
+  --muted-foreground: oklch(0.45 0.03 50);
+  --accent: oklch(0.91 0.03 80);
+  --accent-foreground: oklch(0.2 0.03 40);
+  --border: oklch(0.84 0.02 80);
+  --input: oklch(0.84 0.02 80);
+  --ring: oklch(0.35 0.03 40);
+  --radius: 0.2rem;
+  --font-heading: "Fraunces", "Fraunces Fallback", ui-serif, Georgia, serif;
+}
+
+html.dark[data-theme="ink"] {
+  --background: oklch(0.13 0.015 60);
+  --foreground: oklch(0.94 0.015 90);
+  --card: oklch(0.17 0.015 60);
+  --card-foreground: oklch(0.94 0.015 90);
+  --popover: oklch(0.17 0.015 60);
+  --popover-foreground: oklch(0.94 0.015 90);
+  --primary: oklch(0.92 0.02 90);
+  --primary-foreground: oklch(0.14 0.02 50);
+  --secondary: oklch(0.22 0.015 60);
+  --secondary-foreground: oklch(0.93 0.015 90);
+  --muted: oklch(0.22 0.015 60);
+  --muted-foreground: oklch(0.7 0.02 80);
+  --accent: oklch(0.24 0.02 60);
+  --accent-foreground: oklch(0.94 0.015 90);
+  --border: oklch(0.3 0.015 60);
+  --input: oklch(0.3 0.015 60);
+  --ring: oklch(0.8 0.02 90);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
