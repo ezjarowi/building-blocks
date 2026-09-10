@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { ShareInviteProvider } from "@/components/invite-modal";
 import { allowIndexing } from "@/lib/indexing";
+import { LOOK_BOOT } from "@/lib/looks";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,8 +34,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: LOOK_BOOT }} />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ShareInviteProvider>
           {children}
