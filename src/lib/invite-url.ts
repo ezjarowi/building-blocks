@@ -11,7 +11,7 @@ export function inviteText(name: string, url: string) {
   const line = who
     ? `Hey ${who}, take this personality test I found`
     : `Hey, take this personality test I found`;
-  return `${line} ${url}`;
+  return `${line}\n\n${url}`;
 }
 
 export function smsHref(body: string) {
