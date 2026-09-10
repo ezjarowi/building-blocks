@@ -9,11 +9,12 @@ export const dynamic = "force-dynamic";
 export default async function AssessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ to?: string }>;
+  searchParams: Promise<{ to?: string; hi?: string }>;
 }) {
-  const { to } = await searchParams;
+  const { to, hi } = await searchParams;
   let intendedName: string | null = null;
   let inviteToken: string | null = null;
+  const greet = hi === "1" || hi === "true";
 
   if (to) {
     try {
@@ -37,7 +38,11 @@ export default async function AssessPage({
     <div className="flex min-h-full flex-col">
       <SiteHeader quiet />
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-6 pb-24">
-        <AssessClient inviteToken={inviteToken} intendedName={intendedName} />
+        <AssessClient
+          inviteToken={inviteToken}
+          intendedName={intendedName}
+          greet={greet}
+        />
       </main>
     </div>
   );

@@ -83,10 +83,10 @@ export function AdminDashboard() {
     await load();
   }
 
-  async function copyLink(path: string, id: string) {
+  async function copyLink(path: string, key: string) {
     const url = `${window.location.origin}${path}`;
     await navigator.clipboard.writeText(url);
-    setCopied(id);
+    setCopied(key);
     setTimeout(() => setCopied(null), 1500);
   }
 
@@ -119,9 +119,9 @@ export function AdminDashboard() {
         </button>
       </div>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-        Add a name, copy the link, send it. They type their name and take the
-        test. You see whether they responded, what they were typed as, which
-        Git version, and the date. Same person can take it more than once.
+        Type a name, copy a link, send it. You already know who it is from the
+        link. Two versions: greet them (“Hi, Sarah”) or don’t say the name.
+        Same person can take it more than once.
       </p>
 
       <form onSubmit={addPerson} className="mt-8 flex flex-wrap items-end gap-3">
@@ -157,16 +157,39 @@ export function AdminDashboard() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
-                {person.path ? (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full"
-                    onClick={() => copyLink(person.path!, person.id)}
-                  >
-                    {copied === person.id ? "Copied" : "Copy link"}
-                  </Button>
+                {person.token ? (
+                  <>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="rounded-full"
+                      onClick={() =>
+                        copyLink(
+                          `/assess?to=${encodeURIComponent(person.token!)}&hi=1`,
+                          `${person.id}-hi`,
+                        )
+                      }
+                    >
+                      {copied === `${person.id}-hi`
+                        ? "Copied"
+                        : `Hi, ${person.name}`}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="rounded-full"
+                      onClick={() =>
+                        copyLink(
+                          `/assess?to=${encodeURIComponent(person.token!)}`,
+                          `${person.id}-quiet`,
+                        )
+                      }
+                    >
+                      {copied === `${person.id}-quiet` ? "Copied" : "No name"}
+                    </Button>
+                  </>
                 ) : null}
                 <Button
                   type="button"

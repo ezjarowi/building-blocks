@@ -10,13 +10,16 @@ import { Card } from "@/components/ui/card";
 export function AssessClient({
   inviteToken,
   intendedName,
+  greet = false,
 }: {
   inviteToken?: string | null;
   intendedName?: string | null;
+  greet?: boolean;
 }) {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [named, setNamed] = useState(false);
+  const invited = Boolean(inviteToken && intendedName);
+  const [name, setName] = useState(intendedName ?? "");
+  const [named, setNamed] = useState(invited && !greet);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [seenInsight, setSeenInsight] = useState(0);
   const [saving, setSaving] = useState(false);
@@ -71,6 +74,24 @@ export function AssessClient({
     setAnswers((prev) => prev.slice(0, -1));
   }
 
+  if (!named && invited && greet) {
+    return (
+      <div className="flex flex-1 flex-col justify-center py-12">
+        <h1 className="font-heading text-5xl">Hi, {intendedName}.</h1>
+        <p className="mt-4 max-w-md text-muted-foreground">
+          A short preference map. No wrong answers.
+        </p>
+        <Button
+          className="mt-8 h-12 w-fit rounded-full px-6"
+          size="lg"
+          onClick={() => setNamed(true)}
+        >
+          Start
+        </Button>
+      </div>
+    );
+  }
+
   if (!named) {
     return (
       <form
@@ -81,12 +102,7 @@ export function AssessClient({
           setNamed(true);
         }}
       >
-        {intendedName ? (
-          <p className="text-sm text-muted-foreground">
-            This link was made for {intendedName}.
-          </p>
-        ) : null}
-        <h1 className="font-heading mt-3 text-4xl">What&apos;s your name?</h1>
+        <h1 className="font-heading text-4xl">What&apos;s your name?</h1>
         <p className="mt-3 max-w-md text-sm text-muted-foreground">
           So we remember who took it. No account.
         </p>

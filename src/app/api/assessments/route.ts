@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { run, type Answer } from "@/lib/assessment";
 import { getDb } from "@/lib/db";
-import { assessments, invites } from "@/lib/db/schema";
+import { assessments, invites, people } from "@/lib/db/schema";
 import { testVersion } from "@/lib/version";
 
 export async function POST(request: Request) {
@@ -12,10 +12,7 @@ export async function POST(request: Request) {
     inviteToken?: string;
   };
   const answers = body.answers;
-  const name = body.name?.trim() ?? "";
-  if (!name) {
-    return NextResponse.json({ error: "Name required" }, { status: 400 });
-  }
+  let name = body.name?.trim() ?? "";
   if (!Array.isArray(answers) || answers.length < 8 || answers.length > 20) {
     return NextResponse.json({ error: "Invalid answers" }, { status: 400 });
   }
@@ -31,14 +28,23 @@ export async function POST(request: Request) {
   const token = body.inviteToken?.trim();
   if (token) {
     const found = await db
-      .select()
+      .select({
+        inviteId: invites.id,
+        personId: invites.personId,
+        personName: people.name,
+      })
       .from(invites)
+      .innerJoin(people, eq(invites.personId, people.id))
       .where(eq(invites.token, token))
       .limit(1);
     if (found[0]) {
-      inviteId = found[0].id;
+      inviteId = found[0].inviteId;
       personId = found[0].personId;
+      if (!name) name = found[0].personName;
     }
+  }
+  if (!name) {
+    return NextResponse.json({ error: "Name required" }, { status: 400 });
   }
 
   const [row] = await db
