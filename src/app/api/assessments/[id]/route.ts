@@ -46,3 +46,22 @@ export async function PATCH(
   }
   return NextResponse.json(updated);
 }
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  if (!(await isAdmin())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { id } = await params;
+  const db = getDb();
+  const deleted = await db
+    .delete(assessments)
+    .where(eq(assessments.id, id))
+    .returning({ id: assessments.id });
+  if (!deleted[0]) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+  return NextResponse.json({ ok: true });
+}

@@ -82,3 +82,22 @@ export async function PATCH(
   }
   return NextResponse.json(updated);
 }
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  if (!(await isAdmin())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { id } = await params;
+  const db = getDb();
+  const existing = await db.select({ id: people.id }).from(people).where(eq(people.id, id)).limit(1);
+  if (!existing[0]) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+  await db.delete(assessments).where(eq(assessments.personId, id));
+  await db.delete(invites).where(eq(invites.personId, id));
+  await db.delete(people).where(eq(people.id, id));
+  return NextResponse.json({ ok: true });
+}

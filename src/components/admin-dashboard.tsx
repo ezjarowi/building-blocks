@@ -140,7 +140,7 @@ function PersonRecord({
           }}
           rows={2}
           className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
-          placeholder="Optional"
+          placeholder="Notes — saved when you click away"
         />
       </div>
       <p className="mt-3 text-sm text-muted-foreground">
@@ -171,6 +171,28 @@ function PersonRecord({
         >
           {open ? "Hide takes" : "Takes"}
         </Button>
+        <button
+          type="button"
+          className="ml-auto text-sm text-muted-foreground underline-offset-4 hover:text-destructive hover:underline"
+          onClick={() => {
+            const label = name.trim() || "this person";
+            if (
+              !window.confirm(
+                `Delete ${label} and their link? This also deletes their responses.`,
+              )
+            ) {
+              return;
+            }
+            void (async () => {
+              const res = await fetch(`/api/people/${person.id}`, {
+                method: "DELETE",
+              });
+              if (res.ok) onSaved();
+            })();
+          }}
+        >
+          Delete
+        </button>
       </div>
       {open && takes ? (
         <div className="mt-4 space-y-3 border-t border-border pt-4">
@@ -215,6 +237,25 @@ function PersonRecord({
                   {sourceLabel(take.source)} · {shortSha(take.gitSha)} ·{" "}
                   {new Date(take.createdAt).toLocaleString()}
                 </span>
+                <button
+                  type="button"
+                  className="text-muted-foreground underline-offset-4 hover:text-destructive hover:underline"
+                  onClick={() => {
+                    if (!window.confirm("Delete this response?")) return;
+                    void (async () => {
+                      const res = await fetch(`/api/assessments/${take.id}`, {
+                        method: "DELETE",
+                      });
+                      if (!res.ok) return;
+                      setTakes((prev) =>
+                        prev ? prev.filter((t) => t.id !== take.id) : prev,
+                      );
+                      onSaved();
+                    })();
+                  }}
+                >
+                  Delete
+                </button>
               </div>
             ))
           )}
@@ -348,6 +389,25 @@ export function AdminDashboard() {
                   {shortSha(take.gitSha)} ·{" "}
                   {new Date(take.createdAt).toLocaleString()}
                 </span>
+                <button
+                  type="button"
+                  className="text-muted-foreground underline-offset-4 hover:text-destructive hover:underline"
+                  onClick={() => {
+                    if (!window.confirm("Delete this response?")) return;
+                    void (async () => {
+                      const res = await fetch(`/api/assessments/${take.id}`, {
+                        method: "DELETE",
+                      });
+                      if (!res.ok) return;
+                      setUnlinked((prev) =>
+                        prev.filter((t) => t.id !== take.id),
+                      );
+                      void load();
+                    })();
+                  }}
+                >
+                  Delete
+                </button>
               </div>
             ))}
           </div>
