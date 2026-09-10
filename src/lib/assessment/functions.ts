@@ -171,9 +171,9 @@ export const ROLE_LABELS = [
   {
     index: 3,
     key: "child" as const,
-    name: "Glad for help",
+    name: "Relief",
     brief:
-      "What you typically need help with — someone else filling it in is a gift.",
+      "The break from the first two. Easy, almost play. A relief — not a job.",
   },
   {
     index: 4,

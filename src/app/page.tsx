@@ -11,7 +11,7 @@ const STEPS = [
   },
   {
     tone: "bg-choice-b text-white",
-    text: "Then the four building blocks you prefer, in order: happy place, make-sure, glad-for-help, burst.",
+    text: "Then the four building blocks you prefer, in order: happy place, make-sure, relief, burst.",
   },
   {
     tone: "bg-choice-c text-white",

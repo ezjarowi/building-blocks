@@ -8,7 +8,7 @@ This is not a job test and not a letter-dichotomy quiz. Every answer is written 
 
 - One of four temperaments: Progress (NT), Stability (SJ), Meaning (NF), Motion (SP)
 - A 16-type stack with eight functions in order
-- Roles: happy place, make-sure, glad-for-help, burst, then the lower four (i/e mirror)
+- Roles: happy place, make-sure, relief, burst, then the lower four (i/e mirror)
 - Loops: working pair, complementary pair, vision-into-action
 
 The stack is a lock: once happy-place and make-sure are known, child and burst are predicted and confirmed. Clean path is about 9–10 questions. Never more than 20.

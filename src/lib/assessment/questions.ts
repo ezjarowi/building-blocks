@@ -367,7 +367,7 @@ export function childQuestion(child: FunctionId, burst: FunctionId): Question {
   return {
     id: "c1",
     job: "child",
-    prompt: "Which help is a gift?",
+    prompt: "Which would be a relief?",
     stem: "A friend handles one piece. You'd actually be glad.",
     note: NOTE,
     options: [
