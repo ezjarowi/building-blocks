@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input";
 export function TypePicker({
   value,
   onChange,
+  className,
 }: {
   value: string;
   onChange: (value: string) => void;
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const q = value.trim().toUpperCase();
@@ -26,7 +28,7 @@ export function TypePicker({
         onFocus={() => setOpen(true)}
         onBlur={() => setTimeout(() => setOpen(false), 120)}
         placeholder="INTJ"
-        className="w-28"
+        className={className ?? "w-28"}
       />
       {open ? (
         <ul className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md border border-border bg-card py-1 text-sm shadow-sm">

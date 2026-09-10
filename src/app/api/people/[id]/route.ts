@@ -57,11 +57,17 @@ export async function PATCH(
   }
   const { id } = await params;
   const body = (await request.json()) as {
+    name?: string;
     notes?: string;
     expectedType?: string;
   };
   const db = getDb();
-  const patch: { notes?: string | null; expectedType?: string | null } = {};
+  const patch: {
+    name?: string;
+    notes?: string | null;
+    expectedType?: string | null;
+  } = {};
+  if ("name" in body) patch.name = body.name?.trim() ?? "";
   if ("notes" in body) patch.notes = body.notes?.trim() || null;
   if ("expectedType" in body) {
     patch.expectedType = body.expectedType?.trim().toUpperCase() || null;

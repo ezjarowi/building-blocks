@@ -10,10 +10,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SendInvite } from "@/components/send-invite";
+import { TypePicker } from "@/components/type-picker";
 import { invitePath, inviteText, smsHref } from "@/lib/invite-url";
 
 export function InviteClient({ embedded = false }: { embedded?: boolean }) {
   const [name, setName] = useState("");
+  const [expectedType, setExpectedType] = useState("");
+  const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -28,7 +31,7 @@ export function InviteClient({ embedded = false }: { embedded?: boolean }) {
     const res = await fetch("/api/invites", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, expectedType, notes }),
     });
     if (!res.ok) {
       const data = (await res.json().catch(() => null)) as { error?: string } | null;
@@ -39,6 +42,7 @@ export function InviteClient({ embedded = false }: { embedded?: boolean }) {
     const data = (await res.json()) as { token: string; name: string };
     setMade(data);
     setSaving(false);
+    window.dispatchEvent(new Event("bb-invite-created"));
     return data;
   }
 
@@ -67,8 +71,8 @@ export function InviteClient({ embedded = false }: { embedded?: boolean }) {
           Share Invite
         </DialogTitle>
         <DialogDescription>
-          Unique link for one person. Copy it or text it. Name is optional and
-          not in the URL.
+          Unique link for one person. Copy it or text it. Name, guessed type,
+          and notes stay in Responses — not in the URL.
         </DialogDescription>
       </DialogHeader>
     </>
@@ -76,8 +80,8 @@ export function InviteClient({ embedded = false }: { embedded?: boolean }) {
     <>
       <h1 className="font-heading text-4xl">Share Invite</h1>
       <p className="mt-3 max-w-md text-muted-foreground">
-        Make a unique link for one person, then copy it or text it. Name is
-        optional — it is not in the URL.
+        Make a unique link for one person, then copy it or text it. Name,
+        guessed type, and notes stay in Responses — not in the URL.
       </p>
     </>
   );
@@ -86,16 +90,38 @@ export function InviteClient({ embedded = false }: { embedded?: boolean }) {
     <div className={embedded ? "" : "flex flex-1 flex-col justify-center py-8"}>
       {heading}
 
-      <div className={`max-w-sm space-y-2 ${embedded ? "mt-0" : "mt-8"}`}>
-        <Label htmlFor="invite-name">Their name (optional)</Label>
-        <Input
-          id="invite-name"
-          value={made ? made.name : name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Sarah"
-          className="h-11"
-          disabled={Boolean(made) || saving}
-        />
+      <div className={`space-y-4 ${embedded ? "mt-0" : "mt-8"}`}>
+        <div className="space-y-2">
+          <Label htmlFor="invite-name">Their name (optional)</Label>
+          <Input
+            id="invite-name"
+            value={made ? made.name : name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Sarah"
+            className="h-11"
+            disabled={Boolean(made) || saving}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label>Type you think they are (optional)</Label>
+          <TypePicker
+            value={expectedType}
+            onChange={setExpectedType}
+            className="h-11 w-full"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="invite-notes">Notes (optional)</Label>
+          <textarea
+            id="invite-notes"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={2}
+            disabled={Boolean(made) || saving}
+            className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+            placeholder="Anything you want to remember"
+          />
+        </div>
       </div>
       {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
 
@@ -143,6 +169,8 @@ export function InviteClient({ embedded = false }: { embedded?: boolean }) {
           onClick={() => {
             setMade(null);
             setName("");
+            setExpectedType("");
+            setNotes("");
             setCopied(false);
             setError(null);
           }}

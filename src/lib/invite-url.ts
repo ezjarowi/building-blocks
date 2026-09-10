@@ -11,7 +11,8 @@ export function inviteText(name: string, url: string) {
   const line = who
     ? `Hey ${who}, take this personality test I found`
     : `Hey, take this personality test I found`;
-  return `${line}\n\n${url}`;
+  const short = url.replace(/^https:\/\//i, "");
+  return `${line}\n\n${short}`;
 }
 
 export function smsHref(body: string) {
