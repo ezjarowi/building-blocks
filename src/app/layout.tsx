@@ -27,9 +27,7 @@ export const metadata: Metadata = {
   title: BRAND,
   description: BRAND_DESCRIPTION,
   applicationName: BRAND,
-  robots: allowIndexing
-    ? { index: true, follow: true }
-    : { index: false, follow: true },
+  ...(allowIndexing ? { robots: { index: true, follow: true } } : {}),
   openGraph: {
     title: BRAND,
     description: BRAND_DESCRIPTION,
@@ -38,10 +36,18 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
+        url: "/og.jpg",
+        width: 1200,
+        height: 630,
+        alt: BRAND,
+        type: "image/jpeg",
+      },
+      {
         url: "/og.png",
         width: 1200,
         height: 630,
         alt: BRAND,
+        type: "image/png",
       },
     ],
   },
@@ -49,7 +55,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: BRAND,
     description: BRAND_DESCRIPTION,
-    images: ["/og.png"],
+    images: ["/og.jpg"],
   },
   appleWebApp: {
     title: BRAND,
