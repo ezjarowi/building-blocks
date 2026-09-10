@@ -34,10 +34,12 @@ export function ResultView({
   return (
     <div className="space-y-10 pb-8">
       <div>
-        <p className="text-sm tracking-wide text-muted-foreground uppercase">
+        <p className="inline-flex w-fit rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground">
           {t.name} · {t.want}
         </p>
-        <h1 className="font-heading mt-3 text-5xl tracking-tight">{result.type}</h1>
+        <h1 className="font-heading mt-4 text-5xl tracking-tight sm:text-6xl">
+          {result.type}
+        </h1>
         {name ? (
           <p className="mt-2 text-muted-foreground">{name}</p>
         ) : null}
@@ -54,23 +56,27 @@ export function ResultView({
         ) : null}
       </div>
 
-      <section className="space-y-4">
-        <ol className="space-y-4">
-          {result.stack.slice(0, 4).map((id, i) => {
-            const fn = FUNCTIONS[id as FunctionId];
-            const role = ROLE_LABELS[i];
-            return (
-              <li key={id}>
-                <p className="font-heading text-xl">
-                  {i + 1}. {id} · {fn.name}
-                </p>
-                <p className="mt-1 text-muted-foreground">
-                  <span className="text-foreground">{role.name}.</span> {fn.want}
-                </p>
-              </li>
-            );
-          })}
-        </ol>
+      <section className="grid gap-3 sm:grid-cols-2">
+        {result.stack.slice(0, 4).map((id, i) => {
+          const fn = FUNCTIONS[id as FunctionId];
+          const role = ROLE_LABELS[i];
+          return (
+            <div
+              key={id}
+              className="rounded-3xl bg-card px-5 py-5 ring-1 ring-foreground/8"
+            >
+              <span className="flex size-8 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground">
+                {i + 1}
+              </span>
+              <p className="font-heading mt-3 text-xl">
+                {id} · {fn.name}
+              </p>
+              <p className="mt-1 text-muted-foreground">
+                <span className="text-foreground">{role.name}.</span> {fn.want}
+              </p>
+            </div>
+          );
+        })}
       </section>
 
       <section className="space-y-4">
@@ -86,7 +92,7 @@ export function ResultView({
             return (
               <div
                 key={id}
-                className="flex items-start justify-between gap-4 rounded-xl bg-card px-4 py-3 ring-1 ring-foreground/10"
+                className="flex items-start justify-between gap-4 rounded-3xl bg-card px-4 py-3 ring-1 ring-foreground/8"
               >
                 <div>
                   <p className="font-medium">
@@ -125,10 +131,10 @@ export function ResultView({
       </section>
 
       <div className="flex flex-wrap gap-3 pt-4">
-        <Button asChild className="rounded-full" size="lg">
+        <Button asChild className="h-14 rounded-full px-8" size="lg">
           <Link href="/assess">Take it again</Link>
         </Button>
-        <Button asChild variant="outline" className="rounded-full" size="lg">
+        <Button asChild variant="outline" className="h-14 rounded-full px-8" size="lg">
           <Link href="/">Back home</Link>
         </Button>
       </div>
@@ -138,7 +144,7 @@ export function ResultView({
 
 function LoopCard({ title, body }: { title: string; body: string }) {
   return (
-    <Card className="px-5 py-5">
+    <Card className="rounded-3xl px-5 py-5">
       <p className="font-heading text-lg">{title}</p>
       <p className="mt-2 leading-relaxed text-muted-foreground">{body}</p>
     </Card>

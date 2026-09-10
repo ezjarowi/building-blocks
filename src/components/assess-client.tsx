@@ -6,16 +6,15 @@ import { run, type Answer } from "@/lib/assessment";
 import { clearDraft, readDraft, writeDraft } from "@/lib/draft";
 import { rememberTakeId } from "@/lib/my-takes";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 
 function Progress({ named, answered, total }: { named: boolean; answered: number; total: number }) {
   const done = (named ? 1 : 0) + answered;
   const max = 1 + Math.max(total, 8);
   const pct = Math.min(100, (done / max) * 100);
   return (
-    <div className="mb-8 h-1.5 overflow-hidden rounded-full bg-secondary">
+    <div className="mb-8 h-3 overflow-hidden rounded-full bg-secondary">
       <div
-        className="h-full rounded-full bg-primary transition-all"
+        className="h-full rounded-full bg-primary transition-all duration-300"
         style={{ width: `${pct}%` }}
       />
     </div>
@@ -199,7 +198,7 @@ export function AssessClient({
             This one was made for you. No wrong answers.
           </p>
           <Button
-            className="mt-8 h-12 w-fit rounded-full px-6"
+            className="mt-8 h-14 w-fit rounded-full px-8"
             size="lg"
             onClick={() => {
               setNamed(true);
@@ -229,7 +228,7 @@ export function AssessClient({
           So we remember who took it. No account.
         </p>
         <input
-          className="mt-8 h-12 w-full max-w-sm rounded-xl border border-input bg-card px-4 text-base outline-none ring-ring focus:ring-2"
+          className="mt-8 h-14 w-full max-w-sm rounded-full border border-input bg-card px-5 text-base outline-none ring-ring focus:ring-2"
           value={name}
           onChange={(e) => setName(e.target.value)}
           autoComplete="name"
@@ -237,7 +236,7 @@ export function AssessClient({
         />
         <Button
           type="submit"
-          className="mt-6 h-12 w-fit rounded-full px-6"
+          className="mt-6 h-14 w-fit rounded-full px-8"
           size="lg"
           disabled={!name.trim()}
         >
@@ -262,7 +261,7 @@ export function AssessClient({
       <div className="flex flex-1 flex-col py-4">
         <Progress named answered={state.answered} total={state.total} />
         <div className="flex flex-1 flex-col justify-center py-8">
-        <p className="text-sm tracking-wide text-muted-foreground uppercase">
+        <p className="inline-flex w-fit rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground">
           A read so far
         </p>
         <h2 className="font-heading mt-4 text-4xl leading-tight text-balance">
@@ -332,11 +331,9 @@ export function AssessClient({
             key={option.id}
             type="button"
             onClick={() => pick(option.id)}
-            className="text-left"
+            className="h-full rounded-3xl bg-card px-6 py-6 text-left text-base leading-relaxed ring-2 ring-foreground/8 transition hover:-translate-y-0.5 hover:shadow-sm hover:ring-foreground/25 active:translate-y-0"
           >
-            <Card className="h-full px-5 py-5 ring-foreground/10 transition hover:ring-primary/40">
-              <p className="text-base leading-relaxed">{option.label}</p>
-            </Card>
+            {option.label}
           </button>
         ))}
       </div>

@@ -73,7 +73,7 @@ html[data-theme="simple"] {
   --border: oklch(0.9 0 0);
   --input: oklch(0.9 0 0);
   --ring: oklch(0.4 0 0);
-  --radius: 0.35rem;
+  --radius: 1rem;
   --font-heading: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -237,6 +237,9 @@ html.dark[data-theme="studio"] {
   }
   body {
     @apply bg-background text-foreground;
+  }
+  button:not(:disabled) {
+    @apply cursor-pointer;
   }
   h1,
   h2,
