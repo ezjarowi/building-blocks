@@ -1,4 +1,4 @@
-import { jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { integer, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const people = pgTable("people", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -33,6 +33,15 @@ export const assessments = pgTable("assessments", {
   inviteId: uuid("invite_id").references(() => invites.id),
   gitSha: text("git_sha"),
   createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const adminLockouts = pgTable("admin_lockouts", {
+  ip: text("ip").primaryKey(),
+  failures: integer("failures").notNull().default(0),
+  lockedUntil: timestamp("locked_until", { withTimezone: true }),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
 });

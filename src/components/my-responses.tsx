@@ -49,7 +49,8 @@ export function MyResponses() {
     });
     setSaving(false);
     if (!res.ok) {
-      setError("Wrong password.");
+      const data = (await res.json().catch(() => null)) as { error?: string } | null;
+      setError(data?.error ?? "Wrong password.");
       return;
     }
     router.refresh();

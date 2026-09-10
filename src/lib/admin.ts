@@ -2,8 +2,8 @@ import { cookies } from "next/headers";
 
 export const ADMIN_COOKIE = "bb_admin";
 
-export function adminSecret(): string | undefined {
-  return process.env.ADMIN_SECRET;
+export function adminSecret(): string {
+  return process.env.ADMIN_SECRET || "password";
 }
 
 export async function isAdmin(): Promise<boolean> {
