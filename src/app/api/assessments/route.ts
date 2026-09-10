@@ -49,6 +49,15 @@ export async function POST(request: Request) {
       }
     }
   }
+  if (!personId && name) {
+    const named = await db.select({ id: people.id, name: people.name }).from(people);
+    const matches = named.filter(
+      (p) => p.name.trim().toLowerCase() === name.toLowerCase(),
+    );
+    if (matches.length === 1) {
+      personId = matches[0].id;
+    }
+  }
   if (!name) {
     return NextResponse.json({ error: "Name required" }, { status: 400 });
   }

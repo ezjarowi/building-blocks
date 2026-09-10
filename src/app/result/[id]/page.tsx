@@ -5,7 +5,8 @@ import { ResultView } from "@/components/result-view";
 import { LocalResult } from "@/components/local-result";
 import type { AssessmentResult } from "@/lib/assessment";
 import { getDb } from "@/lib/db";
-import { assessments } from "@/lib/db/schema";
+import { assessments, invites } from "@/lib/db/schema";
+import { invitePath } from "@/lib/invite-url";
 
 export const dynamic = "force-dynamic";
 
@@ -29,13 +30,21 @@ export default async function ResultPage({
 
   const db = getDb();
   const rows = await db
-    .select()
+    .select({
+      row: assessments,
+      token: invites.token,
+    })
     .from(assessments)
+    .leftJoin(invites, eq(assessments.inviteId, invites.id))
     .where(eq(assessments.id, id))
     .limit(1);
 
-  const row = rows[0];
-  if (!row) notFound();
+  const found = rows[0];
+  if (!found) notFound();
+  const row = found.row;
+  const againHref = found.token
+    ? `${invitePath(found.token)}?fresh=1`
+    : "/assess?fresh=1";
 
   return (
     <div className="flex min-h-full flex-col">
@@ -47,6 +56,7 @@ export default async function ResultPage({
           gitSha={row.gitSha}
           quizVersion={row.quizVersion}
           takenAt={row.createdAt}
+          againHref={againHref}
         />
       </main>
     </div>

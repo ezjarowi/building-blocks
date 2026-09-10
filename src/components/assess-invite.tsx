@@ -4,7 +4,13 @@ import { AssessClient } from "@/components/assess-client";
 import { getDb } from "@/lib/db";
 import { invites, people } from "@/lib/db/schema";
 
-export async function AssessInvite({ token }: { token?: string | null }) {
+export async function AssessInvite({
+  token,
+  fresh = false,
+}: {
+  token?: string | null;
+  fresh?: boolean;
+}) {
   let intendedName: string | null = null;
   let inviteToken: string | null = null;
 
@@ -36,6 +42,7 @@ export async function AssessInvite({ token }: { token?: string | null }) {
           inviteToken={inviteToken}
           intendedName={intendedName}
           greet={greet}
+          fresh={fresh}
         />
       </main>
     </div>

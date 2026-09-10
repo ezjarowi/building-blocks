@@ -26,12 +26,14 @@ export function ResultView({
   gitSha,
   quizVersion,
   takenAt,
+  againHref = "/assess?fresh=1",
 }: {
   result: AssessmentResult;
   name?: string | null;
   gitSha?: string | null;
   quizVersion?: string | null;
   takenAt?: Date | string | null;
+  againHref?: string;
 }) {
   const t = TEMPERAMENTS[result.temperament];
   const hero = result.stack[0] as FunctionId;
@@ -144,14 +146,18 @@ export function ResultView({
         </div>
       </section>
 
-      <div className="flex flex-wrap gap-3 pt-4">
+      <div className="flex flex-wrap items-center gap-3 pt-4">
         <Button asChild className="h-14 rounded-full px-8" size="lg">
-          <Link href="/assess">Take it again</Link>
-        </Button>
-        <Button asChild variant="outline" className="h-14 rounded-full px-8" size="lg">
           <Link href="/">Back home</Link>
         </Button>
+        <Button asChild variant="outline" className="h-14 rounded-full px-8" size="lg">
+          <Link href={againHref}>Take it again</Link>
+        </Button>
       </div>
+      <p className="text-muted-foreground text-sm">
+        This result stays saved. Take it again anytime — that&apos;s a new
+        response, same person.
+      </p>
     </div>
   );
 }

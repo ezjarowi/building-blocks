@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { run, type Answer } from "@/lib/assessment";
 import { clearDraft, readDraft, writeDraft } from "@/lib/draft";
 import { rememberTakeId } from "@/lib/my-takes";
+import { readWho, rememberWho } from "@/lib/who";
 import { Button } from "@/components/ui/button";
 
 const LETTERS = ["a", "b", "c", "d"] as const;
@@ -27,10 +28,12 @@ export function AssessClient({
   inviteToken,
   intendedName,
   greet = false,
+  fresh = false,
 }: {
   inviteToken?: string | null;
   intendedName?: string | null;
   greet?: boolean;
+  fresh?: boolean;
 }) {
   const router = useRouter();
   const [ready, setReady] = useState(false);
@@ -76,20 +79,29 @@ export function AssessClient({
 
   useEffect(() => {
     if (readyRef.current) return;
-    const draft = readDraft(inviteToken);
-    const nextToken = inviteToken || draft?.inviteToken || null;
-    const nextName = (intendedName || draft?.name || "").trim();
-    const nextGreet = inviteToken ? greet : Boolean(draft?.greet);
+    const who = readWho();
+    if (fresh) {
+      clearDraft(inviteToken || who?.token);
+    }
+    const draft = fresh ? null : readDraft(inviteToken);
+    const nextToken = inviteToken || draft?.inviteToken || who?.token || null;
+    const nextName = (intendedName || draft?.name || who?.name || "").trim();
+    const nextGreet = fresh
+      ? false
+      : inviteToken
+        ? greet
+        : Boolean(draft?.greet);
     const started = Boolean(draft?.named || (draft?.answers.length ?? 0) > 0);
-    const nextNamed =
-      started || Boolean(nextName && nextToken && !nextGreet);
+    const nextNamed = fresh
+      ? Boolean(nextName)
+      : started || Boolean(nextName && nextToken && !nextGreet);
     const restored = {
       token: nextToken,
       greet: nextGreet,
       name: nextName,
       named: nextNamed,
-      answers: draft?.answers ?? [],
-      seenInsight: draft?.seenInsight ?? 0,
+      answers: fresh ? [] : (draft?.answers ?? []),
+      seenInsight: fresh ? 0 : (draft?.seenInsight ?? 0),
     };
     snap.current = restored;
     readyRef.current = true;
@@ -101,7 +113,7 @@ export function AssessClient({
     setSeenInsight(restored.seenInsight);
     writeDraft(nextToken, restored);
     setReady(true);
-  }, [inviteToken, intendedName, greet]);
+  }, [inviteToken, intendedName, greet, fresh]);
 
   useEffect(() => {
     const flush = () => {
@@ -141,10 +153,12 @@ export function AssessClient({
       }
       const data = (await res.json()) as { id: string };
       rememberTakeId(data.id);
+      rememberWho({ token, name: name.trim() });
       doneRef.current = true;
       clearDraft(token);
       router.push(`/result/${data.id}`);
     } catch {
+      rememberWho({ token, name: name.trim() });
       sessionStorage.setItem("bb-answers", JSON.stringify(nextAnswers));
       router.push("/result/local");
     }
