@@ -39,6 +39,18 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-choice-a: var(--choice-a);
+  --color-choice-a-wash: var(--choice-a-wash);
+  --color-choice-a-ink: var(--choice-a-ink);
+  --color-choice-b: var(--choice-b);
+  --color-choice-b-wash: var(--choice-b-wash);
+  --color-choice-b-ink: var(--choice-b-ink);
+  --color-choice-c: var(--choice-c);
+  --color-choice-c-wash: var(--choice-c-wash);
+  --color-choice-c-ink: var(--choice-c-ink);
+  --color-choice-d: var(--choice-d);
+  --color-choice-d-wash: var(--choice-d-wash);
+  --color-choice-d-ink: var(--choice-d-ink);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -50,53 +62,73 @@
 
 :root,
 html[data-theme="simple"] {
-  --chart-1: oklch(0.2 0 0);
-  --chart-2: oklch(0.35 0 0);
-  --chart-3: oklch(0.5 0 0);
-  --chart-4: oklch(0.65 0 0);
-  --chart-5: oklch(0.8 0 0);
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0.16 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.16 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.16 0 0);
-  --primary: oklch(0.18 0 0);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.95 0 0);
-  --secondary-foreground: oklch(0.2 0 0);
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.48 0 0);
-  --accent: oklch(0.94 0 0);
-  --accent-foreground: oklch(0.18 0 0);
+  --choice-a: oklch(0.67 0.18 25);
+  --choice-a-wash: oklch(0.96 0.04 25);
+  --choice-a-ink: oklch(0.4 0.14 25);
+  --choice-b: oklch(0.64 0.12 175);
+  --choice-b-wash: oklch(0.95 0.04 175);
+  --choice-b-ink: oklch(0.34 0.09 175);
+  --choice-c: oklch(0.7 0.16 70);
+  --choice-c-wash: oklch(0.97 0.045 85);
+  --choice-c-ink: oklch(0.45 0.1 70);
+  --choice-d: oklch(0.6 0.16 300);
+  --choice-d-wash: oklch(0.96 0.035 300);
+  --choice-d-ink: oklch(0.38 0.12 300);
+  --chart-1: oklch(0.67 0.18 25);
+  --chart-2: oklch(0.64 0.12 175);
+  --chart-3: oklch(0.78 0.14 82);
+  --chart-4: oklch(0.6 0.16 300);
+  --chart-5: oklch(0.7 0.1 40);
+  --background: oklch(0.985 0.02 80);
+  --foreground: oklch(0.24 0.04 40);
+  --card: oklch(0.995 0.012 80);
+  --card-foreground: oklch(0.24 0.04 40);
+  --popover: oklch(0.995 0.012 80);
+  --popover-foreground: oklch(0.24 0.04 40);
+  --primary: oklch(0.58 0.18 25);
+  --primary-foreground: oklch(0.99 0.01 80);
+  --secondary: oklch(0.95 0.04 75);
+  --secondary-foreground: oklch(0.32 0.06 40);
+  --muted: oklch(0.95 0.03 75);
+  --muted-foreground: oklch(0.48 0.04 50);
+  --accent: oklch(0.94 0.05 70);
+  --accent-foreground: oklch(0.3 0.06 40);
   --destructive: oklch(0.55 0.2 25);
-  --border: oklch(0.9 0 0);
-  --input: oklch(0.9 0 0);
-  --ring: oklch(0.4 0 0);
-  --radius: 1rem;
-  --font-heading: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --border: oklch(0.9 0.03 70);
+  --input: oklch(0.9 0.03 70);
+  --ring: oklch(0.58 0.16 25);
+  --radius: 1.1rem;
+  --font-heading: "Fraunces", "Fraunces Fallback", ui-serif, Georgia, serif;
 }
 
 html.dark,
 html.dark[data-theme="simple"] {
   color-scheme: dark;
-  --background: oklch(0.14 0 0);
-  --foreground: oklch(0.96 0 0);
-  --card: oklch(0.18 0 0);
-  --card-foreground: oklch(0.96 0 0);
-  --popover: oklch(0.18 0 0);
-  --popover-foreground: oklch(0.96 0 0);
-  --primary: oklch(0.94 0 0);
-  --primary-foreground: oklch(0.14 0 0);
-  --secondary: oklch(0.22 0 0);
-  --secondary-foreground: oklch(0.94 0 0);
-  --muted: oklch(0.22 0 0);
-  --muted-foreground: oklch(0.7 0 0);
-  --accent: oklch(0.24 0 0);
-  --accent-foreground: oklch(0.96 0 0);
-  --border: oklch(0.3 0 0);
-  --input: oklch(0.3 0 0);
-  --ring: oklch(0.8 0 0);
+  --choice-a-wash: oklch(0.3 0.07 25);
+  --choice-a-ink: oklch(0.92 0.06 40);
+  --choice-b-wash: oklch(0.28 0.05 175);
+  --choice-b-ink: oklch(0.9 0.05 180);
+  --choice-c-wash: oklch(0.32 0.06 80);
+  --choice-c-ink: oklch(0.93 0.06 85);
+  --choice-d-wash: oklch(0.3 0.07 300);
+  --choice-d-ink: oklch(0.92 0.05 300);
+  --background: oklch(0.18 0.025 40);
+  --foreground: oklch(0.96 0.015 80);
+  --card: oklch(0.22 0.03 40);
+  --card-foreground: oklch(0.96 0.015 80);
+  --popover: oklch(0.22 0.03 40);
+  --popover-foreground: oklch(0.96 0.015 80);
+  --primary: oklch(0.72 0.16 30);
+  --primary-foreground: oklch(0.18 0.03 40);
+  --secondary: oklch(0.26 0.03 40);
+  --secondary-foreground: oklch(0.94 0.02 80);
+  --muted: oklch(0.26 0.03 40);
+  --muted-foreground: oklch(0.74 0.03 70);
+  --accent: oklch(0.28 0.04 40);
+  --accent-foreground: oklch(0.96 0.015 80);
+  --border: oklch(0.34 0.03 40);
+  --input: oklch(0.34 0.03 40);
+  --ring: oklch(0.72 0.14 30);
 }
 
 html[data-theme="paper"] {
@@ -414,5 +446,93 @@ html.dark[data-theme="ink"] {
   h3,
   .font-heading {
     font-family: var(--font-heading);
+  }
+}
+
+@layer components {
+  .quiz-bar-fill {
+    background: linear-gradient(
+      90deg,
+      var(--choice-a),
+      var(--choice-c) 45%,
+      var(--choice-b) 75%,
+      var(--choice-d)
+    );
+  }
+
+  .choice-tile {
+    --choice: var(--choice-a);
+    --choice-wash: var(--choice-a-wash);
+    --choice-ink: var(--choice-a-ink);
+    display: flex;
+    height: 100%;
+    align-items: flex-start;
+    gap: 1rem;
+    border-radius: var(--radius-3xl);
+    background: var(--choice-wash);
+    padding: 1.15rem 1.25rem;
+    text-align: left;
+    font-size: 1.05rem;
+    line-height: 1.45;
+    box-shadow: 0 0 0 2px color-mix(in oklch, var(--choice) 28%, transparent);
+    transition:
+      transform 150ms ease,
+      box-shadow 150ms ease,
+      background 150ms ease,
+      color 150ms ease;
+  }
+
+  .choice-tile:hover {
+    transform: translateY(-2px);
+    background: var(--choice);
+    color: white;
+    box-shadow:
+      0 0 0 2px var(--choice),
+      0 10px 24px color-mix(in oklch, var(--choice) 28%, transparent);
+  }
+
+  .choice-tile:active {
+    transform: translateY(0);
+  }
+
+  .choice-tile[data-choice="b"] {
+    --choice: var(--choice-b);
+    --choice-wash: var(--choice-b-wash);
+    --choice-ink: var(--choice-b-ink);
+  }
+
+  .choice-tile[data-choice="c"] {
+    --choice: var(--choice-c);
+    --choice-wash: var(--choice-c-wash);
+    --choice-ink: var(--choice-c-ink);
+  }
+
+  .choice-tile[data-choice="d"] {
+    --choice: var(--choice-d);
+    --choice-wash: var(--choice-d-wash);
+    --choice-ink: var(--choice-d-ink);
+  }
+
+  .choice-letter {
+    display: flex;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--choice);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: white;
+    transition:
+      background 150ms ease,
+      color 150ms ease;
+  }
+
+  .choice-tile:hover .choice-letter {
+    background: white;
+    color: var(--choice-ink);
   }
 }

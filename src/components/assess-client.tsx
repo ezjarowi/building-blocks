@@ -7,14 +7,16 @@ import { clearDraft, readDraft, writeDraft } from "@/lib/draft";
 import { rememberTakeId } from "@/lib/my-takes";
 import { Button } from "@/components/ui/button";
 
+const LETTERS = ["a", "b", "c", "d"] as const;
+
 function Progress({ named, answered, total }: { named: boolean; answered: number; total: number }) {
   const done = (named ? 1 : 0) + answered;
   const max = 1 + Math.max(total, 8);
   const pct = Math.min(100, (done / max) * 100);
   return (
-    <div className="mb-8 h-3 overflow-hidden rounded-full bg-secondary">
+    <div className="mb-8 h-3.5 overflow-hidden rounded-full bg-secondary">
       <div
-        className="h-full rounded-full bg-primary transition-all duration-300"
+        className="quiz-bar-fill h-full rounded-full transition-all duration-300"
         style={{ width: `${pct}%` }}
       />
     </div>
@@ -261,7 +263,7 @@ export function AssessClient({
       <div className="flex flex-1 flex-col py-4">
         <Progress named answered={state.answered} total={state.total} />
         <div className="flex flex-1 flex-col justify-center py-8">
-        <p className="inline-flex w-fit rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground">
+        <p className="inline-flex w-fit rounded-full bg-choice-b-wash px-3 py-1 text-sm font-medium text-choice-b-ink">
           A read so far
         </p>
         <h2 className="font-heading mt-4 text-4xl leading-tight text-balance">
@@ -313,8 +315,10 @@ export function AssessClient({
         <Progress named answered={state.answered} total={state.total} />
       </div>
 
-      <p className="text-sm text-muted-foreground">{q.prompt}</p>
-      <h1 className="font-heading mt-3 text-3xl leading-tight text-balance sm:text-4xl">
+      <p className="inline-flex w-fit rounded-full bg-choice-c-wash px-3 py-1 text-sm font-medium text-choice-c-ink">
+        {q.prompt}
+      </p>
+      <h1 className="font-heading mt-4 text-3xl leading-tight text-balance sm:text-4xl">
         {q.stem}
       </h1>
       {q.note ? (
@@ -326,16 +330,21 @@ export function AssessClient({
       <div
         className={`mt-8 grid gap-3 ${q.options.length > 2 ? "sm:grid-cols-2" : "grid-cols-1"}`}
       >
-        {q.options.map((option) => (
-          <button
-            key={option.id}
-            type="button"
-            onClick={() => pick(option.id)}
-            className="h-full rounded-3xl bg-card px-6 py-6 text-left text-base leading-relaxed ring-2 ring-foreground/8 transition hover:-translate-y-0.5 hover:shadow-sm hover:ring-foreground/25 active:translate-y-0"
-          >
-            {option.label}
-          </button>
-        ))}
+        {q.options.map((option, i) => {
+          const letter = LETTERS[i] ?? "a";
+          return (
+            <button
+              key={option.id}
+              type="button"
+              onClick={() => pick(option.id)}
+              data-choice={letter}
+              className="choice-tile"
+            >
+              <span className="choice-letter">{letter.toUpperCase()}</span>
+              <span className="pt-1">{option.label}</span>
+            </button>
+          );
+        })}
       </div>
 
       {error ? <p className="mt-6 text-sm text-destructive">{error}</p> : null}

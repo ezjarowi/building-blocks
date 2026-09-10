@@ -13,6 +13,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
+const ROLE_TONES = [
+  { mark: "bg-choice-a text-white", card: "bg-choice-a-wash" },
+  { mark: "bg-choice-b text-white", card: "bg-choice-b-wash" },
+  { mark: "bg-choice-c text-white", card: "bg-choice-c-wash" },
+  { mark: "bg-choice-d text-white", card: "bg-choice-d-wash" },
+] as const;
+
 export function ResultView({
   result,
   name,
@@ -36,7 +43,7 @@ export function ResultView({
   return (
     <div className="space-y-10 pb-8">
       <div>
-        <p className="inline-flex w-fit rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground">
+        <p className="inline-flex w-fit rounded-full bg-choice-c-wash px-3 py-1 text-sm font-medium text-choice-c-ink">
           {t.name} · {t.want}
         </p>
         <h1 className="font-heading mt-4 text-5xl tracking-tight sm:text-6xl">
@@ -64,12 +71,15 @@ export function ResultView({
         {result.stack.slice(0, 4).map((id, i) => {
           const fn = FUNCTIONS[id as FunctionId];
           const role = ROLE_LABELS[i];
+          const tone = ROLE_TONES[i];
           return (
             <div
               key={id}
-              className="rounded-3xl bg-card px-5 py-5 ring-1 ring-foreground/8"
+              className={`rounded-3xl px-5 py-5 ${tone.card}`}
             >
-              <span className="flex size-8 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground">
+              <span
+                className={`flex size-8 items-center justify-center rounded-full text-sm font-semibold ${tone.mark}`}
+              >
                 {i + 1}
               </span>
               <p className="font-heading mt-3 text-xl">

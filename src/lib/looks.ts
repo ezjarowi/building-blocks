@@ -12,7 +12,7 @@ export const LOOK_IDS = [
 export type LookId = (typeof LOOK_IDS)[number];
 
 export const LOOKS: { id: LookId; name: string; vibe: string }[] = [
-  { id: "simple", name: "Simple", vibe: "Almost no color" },
+  { id: "simple", name: "Simple", vibe: "Warm quiz, not a clinic" },
   { id: "paper", name: "Paper", vibe: "Warm, quiet, notebook" },
   { id: "modern", name: "Modern", vibe: "Cool, clean, a bit airy" },
   { id: "playful", name: "Playful", vibe: "Friendly, a little loud" },
