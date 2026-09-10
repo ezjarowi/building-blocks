@@ -17,10 +17,10 @@ export function SiteHeader({ quiet = false }: { quiet?: boolean }) {
             Take it
           </Link>
           <Link
-            href="/admin"
+            href="/responses"
             className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
-            Invite
+            Responses
           </Link>
         </div>
       )}

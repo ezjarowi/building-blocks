@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -39,6 +40,7 @@ type Unlinked = {
 };
 
 export function AdminDashboard() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [people, setPeople] = useState<PersonRow[]>([]);
   const [unlinked, setUnlinked] = useState<Unlinked[]>([]);
@@ -103,7 +105,19 @@ export function AdminDashboard() {
 
   return (
     <div className="py-8">
-      <h1 className="font-heading text-4xl">People</h1>
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <h1 className="font-heading text-4xl">All responses</h1>
+        <button
+          type="button"
+          className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+          onClick={async () => {
+            await fetch("/api/admin/logout", { method: "POST" });
+            router.refresh();
+          }}
+        >
+          Just mine
+        </button>
+      </div>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
         Add a name, copy the link, send it. They type their name and take the
         test. You see whether they responded, what they were typed as, which

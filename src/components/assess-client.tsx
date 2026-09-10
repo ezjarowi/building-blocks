@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { run, type Answer } from "@/lib/assessment";
+import { rememberTakeId } from "@/lib/my-takes";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -43,6 +44,7 @@ export function AssessClient({
         throw new Error("Could not save");
       }
       const data = (await res.json()) as { id: string };
+      rememberTakeId(data.id);
       router.push(`/result/${data.id}`);
     } catch {
       sessionStorage.setItem("bb-answers", JSON.stringify(nextAnswers));
