@@ -182,7 +182,7 @@ export function AdminDashboard() {
                       className="rounded-full"
                       onClick={() =>
                         copyLink(
-                          `/assess?to=${encodeURIComponent(person.token!)}`,
+                          `/assess?to=${encodeURIComponent(person.token!)}&quiet=1`,
                           `${person.id}-quiet`,
                         )
                       }

@@ -7,6 +7,20 @@ import { rememberTakeId } from "@/lib/my-takes";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
+function Progress({ named, answered, total }: { named: boolean; answered: number; total: number }) {
+  const done = (named ? 1 : 0) + answered;
+  const max = 1 + Math.max(total, 8);
+  const pct = Math.min(100, (done / max) * 100);
+  return (
+    <div className="mb-8 h-1.5 overflow-hidden rounded-full bg-secondary">
+      <div
+        className="h-full rounded-full bg-primary transition-all"
+        style={{ width: `${pct}%` }}
+      />
+    </div>
+  );
+}
+
 export function AssessClient({
   inviteToken,
   intendedName,
@@ -76,18 +90,21 @@ export function AssessClient({
 
   if (!named && invited && greet) {
     return (
-      <div className="flex flex-1 flex-col justify-center py-12">
-        <h1 className="font-heading text-5xl">Hi, {intendedName}.</h1>
-        <p className="mt-4 max-w-md text-muted-foreground">
-          A short preference map. No wrong answers.
-        </p>
-        <Button
-          className="mt-8 h-12 w-fit rounded-full px-6"
-          size="lg"
-          onClick={() => setNamed(true)}
-        >
-          Start
-        </Button>
+      <div className="flex flex-1 flex-col py-4">
+        <Progress named={false} answered={0} total={state.total} />
+        <div className="flex flex-1 flex-col justify-center py-8">
+          <h1 className="font-heading text-5xl">Hi, {intendedName}.</h1>
+          <p className="mt-4 max-w-md text-lg text-muted-foreground">
+            This one was made for you. No wrong answers.
+          </p>
+          <Button
+            className="mt-8 h-12 w-fit rounded-full px-6"
+            size="lg"
+            onClick={() => setNamed(true)}
+          >
+            Start
+          </Button>
+        </div>
       </div>
     );
   }
@@ -95,13 +112,15 @@ export function AssessClient({
   if (!named) {
     return (
       <form
-        className="flex flex-1 flex-col justify-center py-12"
+        className="flex flex-1 flex-col py-4"
         onSubmit={(e) => {
           e.preventDefault();
           if (!name.trim()) return;
           setNamed(true);
         }}
       >
+        <Progress named={false} answered={0} total={state.total} />
+        <div className="flex flex-1 flex-col justify-center py-8">
         <h1 className="font-heading text-4xl">What&apos;s your name?</h1>
         <p className="mt-3 max-w-md text-sm text-muted-foreground">
           So we remember who took it. No account.
@@ -121,6 +140,7 @@ export function AssessClient({
         >
           Continue
         </Button>
+        </div>
       </form>
     );
   }
@@ -136,7 +156,9 @@ export function AssessClient({
 
   if (showInsight && state.insight) {
     return (
-      <div className="flex flex-1 flex-col justify-center py-12">
+      <div className="flex flex-1 flex-col py-4">
+        <Progress named answered={state.answered} total={state.total} />
+        <div className="flex flex-1 flex-col justify-center py-8">
         <p className="text-sm tracking-wide text-muted-foreground uppercase">
           A read so far
         </p>
@@ -153,6 +175,7 @@ export function AssessClient({
         >
           Keep going
         </Button>
+        </div>
       </div>
     );
   }
@@ -169,11 +192,7 @@ export function AssessClient({
   return (
     <div className="flex flex-1 flex-col py-4">
       <div className="mb-8">
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <span>
-            Question {state.answered + 1}
-            <span className="text-muted-foreground/70"> · 20 or fewer</span>
-          </span>
+        <div className="flex items-center justify-end text-sm text-muted-foreground">
           {answers.length > 0 ? (
             <button
               type="button"
@@ -182,16 +201,11 @@ export function AssessClient({
             >
               Back
             </button>
-          ) : null}
+          ) : (
+            <span className="h-5" />
+          )}
         </div>
-        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-secondary">
-          <div
-            className="h-full rounded-full bg-primary transition-all"
-            style={{
-              width: `${Math.min(100, (state.answered / state.total) * 100)}%`,
-            }}
-          />
-        </div>
+        <Progress named answered={state.answered} total={state.total} />
       </div>
 
       <p className="text-sm text-muted-foreground">{q.prompt}</p>

@@ -9,12 +9,12 @@ export const dynamic = "force-dynamic";
 export default async function AssessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ to?: string; hi?: string }>;
+  searchParams: Promise<{ to?: string; hi?: string; quiet?: string }>;
 }) {
-  const { to, hi } = await searchParams;
+  const { to, hi, quiet } = await searchParams;
   let intendedName: string | null = null;
   let inviteToken: string | null = null;
-  const greet = hi === "1" || hi === "true";
+  const greet = Boolean(to) && quiet !== "1" && quiet !== "true";
 
   if (to) {
     try {
