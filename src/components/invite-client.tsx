@@ -97,7 +97,6 @@ export function InviteClient({ embedded = false }: { embedded?: boolean }) {
             id="invite-name"
             value={made ? made.name : name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Sarah"
             className="h-11"
             disabled={Boolean(made) || saving}
           />
