@@ -9,20 +9,12 @@ export function SiteHeader({ quiet = false }: { quiet?: boolean }) {
       {quiet ? (
         <span className="text-muted-foreground text-sm">No wrong answers</span>
       ) : (
-        <div className="flex items-center gap-4">
-          <Link
-            href="/assess"
-            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-          >
-            Take it
-          </Link>
-          <Link
-            href="/responses"
-            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-          >
-            Responses
-          </Link>
-        </div>
+        <Link
+          href="/assess"
+          className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+        >
+          Take it
+        </Link>
       )}
     </header>
   );
