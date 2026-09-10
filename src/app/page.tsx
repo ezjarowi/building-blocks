@@ -14,9 +14,9 @@ export default function Home() {
           Which four building blocks does your mind actually prefer?
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-pretty text-muted-foreground">
-          Sixteen questions. Every option is a good one. Answer for what would
-          be <em>fun</em> — not what a boss, a parent, or a résumé would like
-          to hear.
+          Twenty questions or fewer — often around ten, if the stack locks.
+          Every option is a good one. Answer for what would be <em>fun</em> —
+          not what a boss, a parent, or a résumé would like to hear.
         </p>
         <ul className="mt-8 space-y-3 text-[0.95rem] leading-relaxed">
           <li>You&apos;ll see a temperament early — Progress, Stability, Meaning, or Motion.</li>

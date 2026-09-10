@@ -6,7 +6,7 @@ import { assessments } from "@/lib/db/schema";
 export async function POST(request: Request) {
   const body = (await request.json()) as { answers?: Answer[] };
   const answers = body.answers;
-  if (!Array.isArray(answers) || answers.length < 16 || answers.length > 20) {
+  if (!Array.isArray(answers) || answers.length < 8 || answers.length > 20) {
     return NextResponse.json({ error: "Invalid answers" }, { status: 400 });
   }
 

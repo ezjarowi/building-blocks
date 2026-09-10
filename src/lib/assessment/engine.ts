@@ -1,20 +1,14 @@
-import { applyOption, emptyScores, finalize, type Scores } from "./scoring";
 import {
-  getQuestion,
+  apply,
+  emptyHypothesis,
+  finalize,
   insightAfter,
-  plannedLength,
-  type Answer,
-  type Question,
-} from "./questions";
-import type { AssessmentResult } from "./scoring";
-
-export type EngineStep = {
-  question: Question;
-  answer: Answer;
-};
+  nextQuestion,
+  type AssessmentResult,
+} from "./flow";
+import type { Answer, Question } from "./questions";
 
 export type EngineState = {
-  scores: Scores;
   next: Question | null;
   done: boolean;
   total: number;
@@ -25,41 +19,32 @@ export type EngineState = {
 };
 
 export function run(answers: Answer[]): EngineState {
-  let scores = emptyScores();
+  let h = emptyHypothesis();
   const history: Question[] = [];
 
   for (const answer of answers) {
-    const question = getQuestion(historyToAnswers(history), scores);
+    const question = nextQuestion(h);
     if (!question) break;
     const option = question.options.find((o) => o.id === answer.optionId);
     if (!option) break;
-    scores = applyOption(scores, option);
+    h = apply(h, question, option);
     history.push(question);
   }
 
-  const answered = history.length;
-  const next = getQuestion(historyToAnswers(history), scores);
-  const total = plannedLength(historyToAnswers(history), scores);
-  const done = next == null;
-  const insight = insightAfter(historyToAnswers(history), scores);
+  const next = nextQuestion(h);
+  const result = h.status === "confirmed" || next == null ? finalize(h) : null;
+  const done = Boolean(result) && (h.status === "confirmed" || next == null);
+  const repairing = h.asked.some((id) =>
+    ["t5", "p3", "r-split", "kill-te-home"].includes(id),
+  );
 
   return {
-    scores,
-    next,
+    next: done ? null : next,
     done,
-    total,
-    answered,
-    insight,
-    result: done ? finalize(scores) : null,
+    total: h.status === "confirmed" ? history.length : repairing ? 20 : 10,
+    answered: history.length,
+    insight: insightAfter(h),
+    result: done ? result : null,
     history,
   };
-}
-
-function historyToAnswers(history: Question[]): Answer[] {
-  // getQuestion only needs length + whether t5 was asked, plus scores.
-  // Reconstruct placeholder answers with the question ids.
-  return history.map((q) => ({
-    questionId: q.id,
-    optionId: q.options[0]?.id ?? "",
-  }));
 }

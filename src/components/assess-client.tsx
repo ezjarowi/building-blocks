@@ -103,7 +103,8 @@ export function AssessClient() {
       <div className="mb-8">
         <div className="flex items-center justify-between text-sm text-muted-foreground">
           <span>
-            {state.answered + 1} of {state.total}
+            Question {state.answered + 1}
+            <span className="text-muted-foreground/70"> · 20 or fewer</span>
           </span>
           {answers.length > 0 ? (
             <button
