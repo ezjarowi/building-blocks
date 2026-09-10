@@ -14,8 +14,7 @@ export function SendInvite({
   copied: boolean;
   onCopy: (path: string) => void;
 }) {
-  const greet = Boolean(name.trim());
-  const path = invitePath(token, greet);
+  const path = invitePath(token);
 
   function text() {
     const url = `${window.location.origin}${path}`;

@@ -46,6 +46,6 @@ export async function createInvite({
     id: person.id,
     name: person.name,
     token,
-    path: invitePath(token, Boolean(name.trim())),
+    path: invitePath(token),
   } as const;
 }

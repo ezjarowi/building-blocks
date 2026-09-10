@@ -42,14 +42,14 @@ export function InviteClient({ embedded = false }: { embedded?: boolean }) {
     return data;
   }
 
-  function fullUrl(token: string, who: string) {
-    return `${window.location.origin}${invitePath(token, Boolean(who.trim()))}`;
+  function fullUrl(token: string) {
+    return `${window.location.origin}${invitePath(token)}`;
   }
 
   async function copyNow() {
     const link = await makeLink();
     if (!link) return;
-    await navigator.clipboard.writeText(fullUrl(link.token, link.name));
+    await navigator.clipboard.writeText(fullUrl(link.token));
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   }
@@ -57,7 +57,7 @@ export function InviteClient({ embedded = false }: { embedded?: boolean }) {
   async function textNow() {
     const link = await makeLink();
     if (!link) return;
-    window.location.href = smsHref(inviteText(link.name, fullUrl(link.token, link.name)));
+    window.location.href = smsHref(inviteText(link.name, fullUrl(link.token)));
   }
 
   const heading = embedded ? (

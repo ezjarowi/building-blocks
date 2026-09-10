@@ -132,7 +132,7 @@ export function clearDraft(inviteToken?: string | null) {
 
 export function assessPathFromDraft(draft?: Draft | null): string {
   const d = draft ?? (typeof window === "undefined" ? null : readDraft());
-  if (d?.inviteToken) return invitePath(d.inviteToken, d.greet);
+  if (d?.inviteToken) return invitePath(d.inviteToken);
   return "/assess";
 }
 
