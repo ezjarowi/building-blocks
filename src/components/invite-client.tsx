@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
+  DialogClose,
   DialogDescription,
   DialogHeader,
   DialogTitle,
@@ -159,6 +160,17 @@ export function InviteClient({ embedded = false }: { embedded?: boolean }) {
             </Button>
           </>
         )}
+        {embedded ? (
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-11 rounded-full px-4"
+            >
+              Cancel
+            </Button>
+          </DialogClose>
+        ) : null}
       </div>
 
       {made ? (
