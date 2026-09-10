@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { PasswordField } from "@/components/password-field";
 
 export function AdminLogin() {
-  const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -27,7 +25,7 @@ export function AdminLogin() {
       setError(data?.error ?? "Wrong password.");
       return;
     }
-    router.refresh();
+    window.location.assign("/responses");
   }
 
   return (

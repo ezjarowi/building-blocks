@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -88,7 +87,6 @@ function SendInvite({
 }
 
 export function AdminDashboard() {
-  const router = useRouter();
   const [name, setName] = useState("");
   const [expectedType, setExpectedType] = useState("");
   const [notes, setNotes] = useState("");
@@ -196,7 +194,7 @@ export function AdminDashboard() {
           className="text-sm text-muted-foreground underline-offset-4 hover:underline"
           onClick={async () => {
             await fetch("/api/admin/logout", { method: "POST" });
-            router.refresh();
+            window.location.assign("/responses");
           }}
         >
           Just mine
@@ -207,11 +205,13 @@ export function AdminDashboard() {
         the URL. Copy the link, or text it. Works from your phone.
       </p>
 
-      <TypeCharts counts={typeCounts} />
-
-      <form onSubmit={addPerson} className="mt-8 space-y-3">
+      <form
+        onSubmit={addPerson}
+        className="mt-8 space-y-3 rounded-2xl border border-border bg-card px-4 py-5 sm:px-5"
+      >
+        <p className="font-heading text-xl">New link</p>
         <div className="flex flex-wrap items-end gap-3">
-          <div className="space-y-2">
+          <div className="w-full space-y-2 sm:w-auto">
             <Label htmlFor="person">Name (optional)</Label>
             <Input
               id="person"
@@ -225,7 +225,10 @@ export function AdminDashboard() {
             <Label>Type you think they are</Label>
             <TypePicker value={expectedType} onChange={setExpectedType} />
           </div>
-          <Button type="submit" className="h-11 rounded-full px-5">
+          <Button
+            type="submit"
+            className="h-12 w-full rounded-full px-5 sm:w-auto"
+          >
             Add + make link
           </Button>
         </div>
@@ -242,6 +245,8 @@ export function AdminDashboard() {
         </div>
       </form>
       {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
+
+      <TypeCharts counts={typeCounts} />
 
       <div className="mt-10 space-y-3">
         {people.length === 0 ? (

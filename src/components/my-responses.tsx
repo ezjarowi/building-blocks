@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { readMyTakeIds } from "@/lib/my-takes";
 import { shortSha } from "@/lib/version";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,6 @@ type Take = {
 };
 
 export function MyResponses() {
-  const router = useRouter();
   const [takes, setTakes] = useState<Take[] | null>(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -53,17 +51,34 @@ export function MyResponses() {
       setError(data?.error ?? "Wrong password.");
       return;
     }
-    router.refresh();
+    window.location.assign("/responses");
   }
 
   return (
     <div className="py-8">
       <h1 className="font-heading text-4xl">Responses</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Takes from this browser. Date, test version, and what it gave back.
+        Takes from this browser. Enter the password to add people and send
+        links.
       </p>
 
-      <div className="mt-8 space-y-3">
+      <form onSubmit={unlock} className="mt-8 max-w-sm">
+        <div className="space-y-2">
+          <Label htmlFor="password">Password</Label>
+          <PasswordField
+            id="password"
+            value={password}
+            onChange={setPassword}
+          />
+        </div>
+        {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
+        <Button type="submit" className="mt-4 h-11 rounded-full px-5" disabled={saving}>
+          {saving ? "…" : "Unlock — add links"}
+        </Button>
+      </form>
+
+      <div className="mt-12 space-y-3">
+        <p className="text-sm text-muted-foreground">On this device</p>
         {takes === null ? (
           <p className="text-sm text-muted-foreground">Loading…</p>
         ) : takes.length === 0 ? (
@@ -91,24 +106,6 @@ export function MyResponses() {
           ))
         )}
       </div>
-
-      <form onSubmit={unlock} className="mt-16 max-w-sm border-t border-border pt-8">
-        <p className="text-sm text-muted-foreground">
-          Password shows every response, plus invite links.
-        </p>
-        <div className="mt-4 space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <PasswordField
-            id="password"
-            value={password}
-            onChange={setPassword}
-          />
-        </div>
-        {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
-        <Button type="submit" className="mt-4 rounded-full" disabled={saving}>
-          {saving ? "…" : "See all"}
-        </Button>
-      </form>
     </div>
   );
 }
