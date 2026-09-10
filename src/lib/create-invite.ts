@@ -35,7 +35,7 @@ export async function createInvite({
       notes: notes ?? null,
     })
     .returning();
-  const token = randomBytes(9).toString("base64url");
+  const token = randomBytes(5).toString("base64url");
   await db.insert(invites).values({
     token,
     personId: person.id,

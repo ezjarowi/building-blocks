@@ -1,5 +1,5 @@
 export function invitePath(token: string) {
-  return `/assess?to=${encodeURIComponent(token)}`;
+  return `/s/${encodeURIComponent(token)}`;
 }
 
 export function inviteUrl(token: string, origin: string) {
