@@ -30,40 +30,35 @@ export type Question = {
   options: Option[];
 };
 
-const NOTE =
-  "Every option is a good one. Pick the one that sounds like more fun — not the one a boss or a parent would clap for.";
+const NOTE = "No wrong answers. Pick what's more fun — not what sounds impressive.";
 
 export const TEMPERAMENT_QUESTIONS: Question[] = [
   {
     id: "t1",
     job: "temperament",
     prompt: "Where would you have the best time?",
-    stem: "A surprise free Saturday. Nothing is due. Nobody is grading you.",
+    stem: "A free Saturday. Nothing due. Nobody grading you.",
     note: NOTE,
     options: [
       {
         id: "NT",
         temperament: "NT",
-        label:
-          "A thread that actually gets somewhere — progress toward a future that's better than this one.",
+        label: "Getting somewhere — real progress.",
       },
       {
         id: "SJ",
         temperament: "SJ",
-        label:
-          "The good things staying good. The shape that already holds, kept that way.",
+        label: "Keeping the good thing good.",
       },
       {
         id: "NF",
         temperament: "NF",
-        label:
-          "Something that means something — connection that was actually real.",
+        label: "It actually meaning something.",
       },
       {
         id: "SP",
         temperament: "SP",
-        label:
-          "Something actually happening. Motion, now, in the room, with your hands or your presence.",
+        label: "Getting something moving, today.",
       },
     ],
   },
@@ -71,68 +66,66 @@ export const TEMPERAMENT_QUESTIONS: Question[] = [
     id: "t2",
     job: "temperament",
     prompt: "Which sounds like the better time?",
-    stem: "You're with people you like. No agenda. What's the sweet spot?",
+    stem: "People you like. No agenda. The sweet spot is:",
     note: NOTE,
     options: [
       {
         id: "NT",
         temperament: "NT",
-        label:
-          "The click when a better way forward is found — and you can actually use it.",
+        label: "Finding a better way forward — and using it.",
       },
       {
         id: "SJ",
         temperament: "SJ",
-        label: "Everyone knowing how this goes, and it actually holding.",
+        label: "Everyone knowing how this goes, and it holding.",
       },
       {
         id: "NF",
         temperament: "NF",
-        label:
-          "A real exchange that leaves people closer, like it mattered we were here.",
+        label: "A real exchange. People closer.",
       },
       {
         id: "SP",
         temperament: "SP",
-        label: "Doing it together, not just talking about it. Things moving.",
+        label: "Doing it, not just talking.",
       },
     ],
   },
   {
     id: "t3",
     job: "temperament",
-    prompt: "Which would you enjoy receiving?",
-    stem: "If life quietly gave you more of only one thing, which would feel like a gift?",
+    prompt: "Which would feel like a gift?",
+    stem: "Life gives you more of only one thing:",
     note: NOTE,
     options: [
       {
         id: "NT",
         temperament: "NT",
-        label: "Progress — things actually moving toward a future that's better.",
+        label: "Progress — a future that's getting better.",
       },
       {
         id: "SJ",
         temperament: "SJ",
-        label: "Stability — the good things staying good, on purpose.",
+        label: "Stability — the good things stay good.",
       },
       {
         id: "NF",
         temperament: "NF",
-        label: "Meaning — connection, and a sense that it matters.",
+        label: "Meaning — it matters, and people connect.",
       },
       {
         id: "SP",
         temperament: "SP",
-        label: "Motion — the feeling of things getting going, today.",
+        label: "Motion — things get going.",
       },
     ],
   },
   {
     id: "t4",
     job: "temperament",
-    prompt: "Which absence would actually bother you?",
-    stem: "The other three can still be good. Which missing one makes them feel like the wrong prize?",
-    note: "Still no wrong answer. Which hole would you not want.",
+    prompt: "Which hole would you not want?",
+    stem: "The other three can still be good. Which missing one ruins it?",
+    note: NOTE,
     options: [
       {
         id: "NT",
@@ -168,8 +161,8 @@ export function temperamentTiebreak(a: TemperamentId, b: TemperamentId): Questio
   return {
     id: "t5",
     job: "temperament",
-    prompt: "Which life sounds like more fun to be inside?",
-    stem: "Two good lives. Which would you rather wake up in?",
+    prompt: "Which would you rather wake up in?",
+    stem: "Two good lives.",
     note: NOTE,
     options: [
       { id: a, temperament: a, label: labels[a] },
@@ -183,20 +176,20 @@ const PAIR_AS_GOOD: Record<
   [string, string]
 > = {
   NT: [
-    "One future, made to work. Vision and focus, then results that land.",
-    "Many possibilities, made to make sense to me. Alternatives, then my own conclusions.",
+    "One future, made to work.",
+    "Many possibilities, made to make sense to me.",
   ],
   NF: [
-    "One future, made to move people. Vision and focus, then the room comes with you.",
-    "Many possibilities, made to stay true. Alternatives, then alignment with self and others.",
+    "One future, made to move people.",
+    "Many possibilities, made to stay true.",
   ],
   SJ: [
-    "What has held, made to work. Reliability, then results that land.",
-    "What has held, made to hold people together. Reliability, then the room comes with you.",
+    "What has held, made to work.",
+    "What has held, made to hold people together.",
   ],
   SP: [
-    "What's happening, made to make sense to me. Motion, then my own conclusions.",
-    "What's happening, made to stay true. Motion, then alignment with self and others.",
+    "What's happening, made to make sense to me.",
+    "What's happening, made to stay true.",
   ],
 };
 
@@ -205,73 +198,67 @@ const SPLIT_STEM: Record<
   { prompt: string; stem: string; a: Option; b: Option }
 > = {
   NT: {
-    prompt: "Which would be more satisfying?",
-    stem: "A decision is real. You rest when:",
+    prompt: "Which is more satisfying?",
+    stem: "A real decision. You rest when:",
     a: {
       id: "Te",
       fn: "Te",
       pairIndex: 0,
-      label:
-        "It works out there. Methods, results, what already paid for. The private why can wait if the thing lands.",
+      label: "It works out there. Results land.",
     },
     b: {
       id: "Ti",
       fn: "Ti",
       pairIndex: 1,
-      label:
-        "I reached this. My own conclusion holds. The board can wait if I can stand inside the answer.",
+      label: "I reached this. The conclusion is mine.",
     },
   },
   NF: {
-    prompt: "Which would feel better in your body?",
-    stem: "The room is off. You actually need:",
+    prompt: "Which do you actually need?",
+    stem: "The room is off.",
     a: {
       id: "Fe",
       fn: "Fe",
       pairIndex: 0,
-      label:
-        "The room comes with you. The weather between people moves. Your private yes can wait.",
+      label: "People come with you. The room moves.",
     },
     b: {
       id: "Fi",
       fn: "Fi",
       pairIndex: 1,
-      label:
-        "It sits right with me, and with the people it touches. The room can stay awkward if that stays true.",
+      label: "It sits right with me, and with the people it touches.",
     },
   },
   SJ: {
     prompt: "Which would you rather keep true?",
-    stem: "Something good is already in place. The satisfying next move is:",
+    stem: "Something good is already in place.",
     a: {
       id: "Te",
       fn: "Te",
       pairIndex: 0,
-      label: "Make sure it actually works. Results. Effectiveness. It lands.",
+      label: "It actually works. It lands.",
     },
     b: {
       id: "Fe",
       fn: "Fe",
       pairIndex: 1,
-      label:
-        "Make sure people naturally come with it. The room goes. That's the hold.",
+      label: "People naturally come with it.",
     },
   },
   SP: {
-    prompt: "Which would feel like the better time?",
-    stem: "You're already in motion. The satisfying part is:",
+    prompt: "Which is the better time?",
+    stem: "You're already in motion.",
     a: {
       id: "Ti",
       fn: "Ti",
       pairIndex: 0,
-      label: "Getting to a conclusion that's actually yours, in the middle of the doing.",
+      label: "Getting to a conclusion that's mine.",
     },
     b: {
       id: "Fi",
       fn: "Fi",
       pairIndex: 1,
-      label:
-        "It sitting right — with you, and with the people it touches — while it's happening.",
+      label: "It sitting right — with me, and with them.",
     },
   },
 };
@@ -281,8 +268,8 @@ export function pairAsGoodQuestion(temperament: TemperamentId): Question {
   return {
     id: "p1",
     job: "pair",
-    prompt: "Which is the actual engine, not a hobby?",
-    stem: "Two good ways a life like this can run.",
+    prompt: "Which engine?",
+    stem: "Two good ways this can run.",
     note: NOTE,
     options: [
       { id: "0", pairIndex: 0, label: a },
@@ -308,19 +295,19 @@ export function pairRepairQuestion(temperament: TemperamentId): Question {
   return {
     id: "p3",
     job: "pair",
-    prompt: "Which couple would you rather live inside?",
-    stem: "One more, same two engines, said slower.",
+    prompt: "Which pair would you rather live in?",
+    stem: "Same two engines, said slower.",
     note: NOTE,
     options: [
       {
         id: "0",
         pairIndex: 0,
-        label: `${FUNCTIONS[left[0]].short} with ${FUNCTIONS[left[1]].short}.`,
+        label: `${FUNCTIONS[left[0]].name} + ${FUNCTIONS[left[1]].name}`,
       },
       {
         id: "1",
         pairIndex: 1,
-        label: `${FUNCTIONS[right[0]].short} with ${FUNCTIONS[right[1]].short}.`,
+        label: `${FUNCTIONS[right[0]].name} + ${FUNCTIONS[right[1]].name}`,
       },
     ],
   };
@@ -330,20 +317,12 @@ export function heroQuestion(a: FunctionId, b: FunctionId): Question {
   return {
     id: "r-hero",
     job: "hero",
-    prompt: "Which is the happy place? The one you could do for the joy of it.",
-    stem: "Nobody needs you. Nothing is on fire. Where does the mind go and stay?",
+    prompt: "Which is home?",
+    stem: "Nobody needs you. Where do you stay?",
     note: NOTE,
     options: [
-      {
-        id: a,
-        fn: a,
-        label: `${FUNCTIONS[a].short}. You could live in this. The other can wait.`,
-      },
-      {
-        id: b,
-        fn: b,
-        label: `${FUNCTIONS[b].short}. You could live in this. The other can wait.`,
-      },
+      { id: a, fn: a, label: FUNCTIONS[a].want },
+      { id: b, fn: b, label: FUNCTIONS[b].want },
     ],
   };
 }
@@ -352,9 +331,9 @@ export function parentQuestion(a: FunctionId, b: FunctionId): Question {
   return {
     id: "r-parent",
     job: "parent",
-    prompt: "Not which is more impressive. Which one would you make sure of.",
-    stem: "You're away a month. Someone you like is covering. What do you most want still true when you get back — even if it means interrupting the fun of the other?",
-    note: "Keep-true is not more grown. It's the hinge. The other one is allowed to be the fun.",
+    prompt: "Which would you make sure of?",
+    stem: "You're away a month. What still has to be true when you get back?",
+    note: "This isn't the more grown answer. It's just the hinge.",
     options: [
       { id: a, fn: a, label: FUNCTIONS[a].want },
       { id: b, fn: b, label: FUNCTIONS[b].want },
@@ -366,19 +345,19 @@ export function splitQuestion(a: FunctionId, b: FunctionId): Question {
   return {
     id: "r-split",
     job: "split",
-    prompt: "You may not pick the same one twice.",
-    stem: "One is the room you'd live in when nothing is required. One is the hinge you'd restore so the day doesn't fall apart. Which is the room?",
+    prompt: "You can't pick the same one twice.",
+    stem: "One is home. One is the hinge. Which is home?",
     note: NOTE,
     options: [
       {
         id: a,
         fn: a,
-        label: `${FUNCTIONS[a].name} is the room. ${FUNCTIONS[b].name} is the hinge.`,
+        label: `${FUNCTIONS[a].name} is home. ${FUNCTIONS[b].name} is the hinge.`,
       },
       {
         id: b,
         fn: b,
-        label: `${FUNCTIONS[b].name} is the room. ${FUNCTIONS[a].name} is the hinge.`,
+        label: `${FUNCTIONS[b].name} is home. ${FUNCTIONS[a].name} is the hinge.`,
       },
     ],
   };
@@ -388,8 +367,8 @@ export function childQuestion(child: FunctionId, burst: FunctionId): Question {
   return {
     id: "c1",
     job: "child",
-    prompt: "Which help would feel like a gift, not a loss?",
-    stem: "A friend brings one piece so you don't have to carry it. You'd actually be glad — fond, not graded.",
+    prompt: "Which help is a gift?",
+    stem: "A friend handles one piece. You'd actually be glad.",
     note: NOTE,
     options: [
       { id: child, fn: child, label: FUNCTIONS[child].short },
@@ -402,20 +381,12 @@ export function burstQuestion(child: FunctionId, burst: FunctionId): Question {
   return {
     id: "b1",
     job: "burst",
-    prompt: "Which one is a burst, not a home?",
-    stem: "You have about two good hours of extra juice. You can go hard, then you're done — emptied, and that's fine.",
+    prompt: "Which is a burst — not home?",
+    stem: "Two good hours. Then you're empty. That's fine.",
     note: NOTE,
     options: [
-      {
-        id: burst,
-        fn: burst,
-        label: `A burst of ${FUNCTIONS[burst].short.toLowerCase()} — then you don't want it for a while.`,
-      },
-      {
-        id: child,
-        fn: child,
-        label: `A burst of ${FUNCTIONS[child].short.toLowerCase()} — then you don't want it for a while.`,
-      },
+      { id: burst, fn: burst, label: FUNCTIONS[burst].want },
+      { id: child, fn: child, label: FUNCTIONS[child].want },
     ],
   };
 }
@@ -424,8 +395,8 @@ export function teHomeKill(hero: FunctionId, other: FunctionId): Question {
   return {
     id: "kill-te-home",
     job: "split",
-    prompt: "Which would you still want?",
-    stem: "A day with no outcome required. Nothing has to land. No one is watching. What's left?",
+    prompt: "What's left?",
+    stem: "Nothing has to land. No one is watching.",
     note: NOTE,
     options: [
       {

@@ -270,7 +270,7 @@ export function insightAfter(h: Hypothesis): { title: string; body: string } | n
     const [a, b] = h.pair;
     return {
       title: "A working pair is showing",
-      body: `${FUNCTIONS_SAFE(a)} with ${FUNCTIONS_SAFE(b)}. Next we find which is home, and which you make sure of.`,
+      body: `${FUNCTIONS_SAFE(a)} with ${FUNCTIONS_SAFE(b)}. Next: which is home, which you make sure of.`,
     };
   }
 
