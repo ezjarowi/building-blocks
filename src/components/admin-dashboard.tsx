@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { ShareInviteOpen } from "@/components/invite-modal";
 import { SendInvite } from "@/components/send-invite";
 import { TypeCharts } from "@/components/type-charts";
 import { shortSha } from "@/lib/version";
@@ -147,9 +148,9 @@ export function AdminDashboard() {
       </div>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">
         Everyone&apos;s takes — Shared or Walk-in. New links are on{" "}
-        <Link href="/invite" className="underline-offset-4 hover:underline">
+        <ShareInviteOpen className="underline-offset-4 hover:underline">
           Share Invite
-        </Link>
+        </ShareInviteOpen>
         .
       </p>
       {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}

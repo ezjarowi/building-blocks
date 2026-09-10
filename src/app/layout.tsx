@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
+import { ShareInviteProvider } from "@/components/invite-modal";
 import { allowIndexing } from "@/lib/indexing";
 
 const geistSans = Geist({
@@ -35,8 +36,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        {children}
-        <SiteFooter />
+        <ShareInviteProvider>
+          {children}
+          <SiteFooter />
+        </ShareInviteProvider>
       </body>
     </html>
   );

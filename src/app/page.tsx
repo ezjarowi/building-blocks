@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { StartCta } from "@/components/assess-link";
+import { ShareInviteOpen } from "@/components/invite-modal";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
@@ -27,8 +28,11 @@ export default function Home() {
           <Button asChild size="lg" className="h-12 rounded-full px-6 text-base">
             <StartCta />
           </Button>
-          <p className="text-muted-foreground text-sm">About five minutes.</p>
+          <ShareInviteOpen className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+            Share Invite
+          </ShareInviteOpen>
         </div>
+        <p className="mt-3 text-muted-foreground text-sm">About five minutes.</p>
       </main>
     </div>
   );

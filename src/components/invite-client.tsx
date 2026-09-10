@@ -2,12 +2,17 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SendInvite } from "@/components/send-invite";
 import { invitePath, inviteText, smsHref } from "@/lib/invite-url";
 
-export function InviteClient() {
+export function InviteClient({ embedded = false }: { embedded?: boolean }) {
   const [name, setName] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,15 +60,33 @@ export function InviteClient() {
     window.location.href = smsHref(inviteText(link.name, fullUrl(link.token, link.name)));
   }
 
-  return (
-    <div className="flex flex-1 flex-col justify-center py-8">
+  const heading = embedded ? (
+    <>
+      <DialogHeader className="mb-6 text-left">
+        <DialogTitle className="font-heading text-3xl leading-tight">
+          Share Invite
+        </DialogTitle>
+        <DialogDescription>
+          Unique link for one person. Copy it or text it. Name is optional and
+          not in the URL.
+        </DialogDescription>
+      </DialogHeader>
+    </>
+  ) : (
+    <>
       <h1 className="font-heading text-4xl">Share Invite</h1>
       <p className="mt-3 max-w-md text-muted-foreground">
         Make a unique link for one person, then copy it or text it. Name is
         optional — it is not in the URL.
       </p>
+    </>
+  );
 
-      <div className="mt-8 max-w-sm space-y-2">
+  return (
+    <div className={embedded ? "" : "flex flex-1 flex-col justify-center py-8"}>
+      {heading}
+
+      <div className={`max-w-sm space-y-2 ${embedded ? "mt-0" : "mt-8"}`}>
         <Label htmlFor="invite-name">Their name (optional)</Label>
         <Input
           id="invite-name"
