@@ -8,12 +8,12 @@ export function SiteFooter() {
       <span className="flex flex-wrap items-center gap-3">
         <span>© {new Date().getFullYear()} Fawn Finance LLC</span>
         <a
-          href="https://www.churchofjesuschrist.org/study/scriptures/nt/1-cor/12?lang=eng&id=p22#p22"
+          href="https://www.churchofjesuschrist.org/study/scriptures/nt/1-cor/12?lang=eng&id=p21#p21"
           target="_blank"
           rel="noreferrer"
           className="hover:text-muted-foreground"
         >
-          1 Corinthians 12:22
+          1 Corinthians 12:21
         </a>
       </span>
       <span className="flex flex-wrap items-center gap-4">
