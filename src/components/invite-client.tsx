@@ -77,7 +77,7 @@ export function InviteClient() {
       onSubmit={create}
       className="flex flex-1 flex-col justify-center py-8"
     >
-      <h1 className="font-heading text-4xl">Invite someone</h1>
+      <h1 className="font-heading text-4xl">Share Invite</h1>
       <p className="mt-3 max-w-md text-muted-foreground">
         Make a unique link. Name is optional — it stays behind the scenes, not
         in the URL.

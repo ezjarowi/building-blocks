@@ -6,7 +6,7 @@ export function SiteFooter() {
       <span>© {new Date().getFullYear()} Fawn Finance LLC</span>
       <span className="flex gap-4">
         <Link href="/invite" className="hover:text-muted-foreground">
-          Invite
+          Share Invite
         </Link>
         <Link href="/responses" className="hover:text-muted-foreground">
           Responses
